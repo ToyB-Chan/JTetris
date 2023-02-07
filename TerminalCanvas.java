@@ -83,8 +83,8 @@ public class TerminalCanvas {
 	}
 
 	public void drawArea(int x, int y, int width, int height, char character, TerminalColor fgColor, TerminalColor bgColor) {
-		for (int ix = x; ix < width; ix++) {
-			for (int iy = y; iy < height; iy++) {
+		for (int ix = x; ix < x + width; ix++) {
+			for (int iy = y; iy < y + height; iy++) {
 				this.writeToBuffer(ix, iy, character, fgColor, bgColor);
 			}
 		}

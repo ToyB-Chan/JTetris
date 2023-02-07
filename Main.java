@@ -16,22 +16,28 @@ public class Main {
 			}
 		});
 
+		
 		while (true) {
+			/* 
 			for (int ix = 0; ix < canvas.width(); ix += 3) {
 				for (int iy = 0; iy < canvas.height(); iy++) {
 					TerminalColor color = TerminalColor.randomColor();
 					canvas.drawString(ix, iy, "###", color, color.negative());
 				}
 			}
+			*/
+
 
 			input.update();
 
 			String canvasText = "=== Canvas Test ===";
-			canvas.drawString((canvas.width() / 2) - (canvasText.length() / 2), 0, canvasText, TerminalColor.White, TerminalColor.Black);
+			canvas.drawString((canvas.width() / 2) - (canvasText.length() / 2), 0, canvasText, TerminalColor.randomColor(), TerminalColor.Black);
 
 			String keyText = "Keys pressed: ";
 			canvas.drawString(0, 1, keyText + pressedKeys + " ", TerminalColor.White, TerminalColor.Black);
 			pressedKeys = "";
+
+			canvas.drawArea(2, 5, 5, 5, 'L', TerminalColor.White, TerminalColor.DarkCyan);
 
 			canvas.renderBuffer(System.out);
 			Thread.sleep(100);

@@ -1,0 +1,88 @@
+﻿[Files]
+File0=H:\Desktop\JTetris\Drawable.java
+File1=H:\Desktop\JTetris\Main.java
+File2=H:\Desktop\JTetris\TerminalCanvas.java
+File3=H:\Desktop\JTetris\TerminalInputHook.java
+File4=H:\Desktop\JTetris\TerminalInputListener.java
+File5=H:\Desktop\JTetris\TerminalPixel.java
+
+[Box:  - Drawable]
+X=348
+Y=465
+MinVis=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+FontSize=11
+FontName=Segoe UI
+
+[Box:  - Main]
+X=1258
+Y=40
+MinVis=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+FontSize=11
+FontName=Segoe UI
+
+[Box:  - TerminalCanvas]
+X=500
+Y=40
+MinVis=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+FontSize=11
+FontName=Segoe UI
+
+[Box:  - TerminalInputHook]
+X=20
+Y=40
+MinVis=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+FontSize=11
+FontName=Segoe UI
+
+[Box:  - TerminalInputListener]
+X=51
+Y=465
+MinVis=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+FontSize=11
+FontName=Segoe UI
+
+[Box:  - TerminalPixel]
+X=598
+Y=465
+MinVis=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+FontSize=11
+FontName=Segoe UI
+
+[Diagram]
+comments=0
+OffsetX=0
+OffsetY=0
+Visibility=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+ShowConnections=0
+Fontname=Segoe UI
+Fontsize=11
+ShowObjectDiagram=0
+
+[Connections]
+V0=TerminalCanvas#TerminalPixel#Aggregation####0#0#0###0#0
+V1=TerminalInputHook#TerminalInputListener#Aggregation####0#0#0###0#0
+
+[Interactive]
+I0=
+
