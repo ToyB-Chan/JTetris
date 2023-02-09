@@ -36,8 +36,7 @@ public class Main {
 			String keyText = "Keys pressed: ";
 			canvas.drawString(0, 1, keyText + pressedKeys + " ", TerminalColor.White, TerminalColor.Black);
 			pressedKeys = "";
-
-			canvas.drawArea(2, 5, 5, 5, 'L', TerminalColor.White, TerminalColor.DarkCyan);
+			canvas.drawArea(2, 5, 5, 5, '.', TerminalColor.DarkGray, TerminalColor.Transparent);
 
 			canvas.renderBuffer(System.out);
 			Thread.sleep(100);

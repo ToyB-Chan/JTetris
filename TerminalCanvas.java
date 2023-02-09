@@ -22,7 +22,7 @@ public class TerminalCanvas {
 	}
 
 	public void writeToBuffer(int x, int y, char character, TerminalColor fgColor, TerminalColor bgColor) {
-		// discard any writes outside of our size
+		// discard any writes outside of our bounds
 		if (x >= this.width || y >= this.height) {
 			return;
 		}
@@ -76,10 +76,22 @@ public class TerminalCanvas {
 		this.clearBuffer();
 	}
 
+	public void drawPixel(int x, int y, TerminalColor bgColor) {
+		this.writeToBuffer(x, y, ' ', bgColor, bgColor);
+	}
+
 	public void drawString(int x, int y, String string, TerminalColor fgColor, TerminalColor bgColor) {
 		for (int i = 0; i < string.length(); i++) {
 			this.writeToBuffer(x + i, y, string.charAt(i), fgColor, bgColor);
 		}
+	}
+
+	public void drawLine(int x, int y, int x2, int y2, char character, TerminalColor fgColor, TerminalColor bgColor) {
+		throw new UnsupportedOperationException("Not yet implemented.");
+	}
+
+	public void drawBlankLine(int x, int y, int x2, int y2, TerminalColor bgColor) {
+		this.drawLine(x, y, x2, y2, ' ', bgColor, bgColor);
 	}
 
 	public void drawArea(int x, int y, int width, int height, char character, TerminalColor fgColor, TerminalColor bgColor) {
