@@ -20,7 +20,7 @@ public class GameObject {
 	}
 
 	public void setAbsoluteLocationX(int x) {
-
+		
 	}
 
 	public void setAbsoluteLocationY(int y) {
