@@ -30,7 +30,7 @@ public class Main {
 
 			input.update();
 
-			String canvasText = "=== Jurke Test ===";
+			String canvasText = "=== Pape Test ===";
 			canvas.drawString((canvas.width() / 2) - (canvasText.length() / 2), 0, canvasText, TerminalColor.randomColor(), TerminalColor.Black);
 
 			String keyText = "Keys pressed: ";
