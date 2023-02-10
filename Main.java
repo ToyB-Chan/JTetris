@@ -17,6 +17,11 @@ public class Main {
 		});
 
 		
+		Tetromino_L_Shape LShape = new Tetromino_L_Shape();
+		LShape.relativeLocationX = 5;
+		LShape.relativeLocationY = 5;
+
+		
 		while (true) {
 			/* 
 			for (int ix = 0; ix < canvas.width(); ix += 3) {
@@ -36,10 +41,11 @@ public class Main {
 			String keyText = "Keys pressed: ";
 			canvas.drawString(0, 1, keyText + pressedKeys + " ", TerminalColor.White, TerminalColor.Black);
 			pressedKeys = "";
-			canvas.drawArea(2, 5, 5, 5, '.', TerminalColor.DarkGray, TerminalColor.Transparent);
+			LShape.draw(canvas);
+			LShape.relativeLocationY++;
 
 			canvas.renderBuffer(System.out);
-			Thread.sleep(100);
+			Thread.sleep(500);
 		}
 	}
 }
