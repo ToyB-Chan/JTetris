@@ -1,6 +1,6 @@
 public abstract class Tetromino extends GameObject {
 	public TetrominoBlock[] blocks;
-	private int rotation = 0;
+	protected int rotation = 0;
 
 	public abstract void setRotation(int rotation);
 	public int getRotation() { return this.rotation; }
