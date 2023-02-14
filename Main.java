@@ -8,7 +8,7 @@ public class Main {
 		TerminalCanvas canvas = new TerminalCanvas(51, 19, TerminalColor.Black);
 		TerminalInputHook input = new TerminalInputHook();
 
-		Tetromino tetromino = new Tetromino_L_Shape(0);
+		Tetromino tetromino = new Tetromino_I_Shape(0);
 		tetromino.relativeLocationX = 5;
 		tetromino.relativeLocationY = 5;
 

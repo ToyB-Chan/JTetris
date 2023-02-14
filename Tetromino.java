@@ -10,5 +10,7 @@ public abstract class Tetromino extends GameObject {
 		for (int i = 0 ; i < blocks.length; i++) {
 			this.blocks[i].draw(canvas);
 		}
+
+		canvas.drawPixel(relativeLocationX, relativeLocationY, TerminalColor.Red);
 	}
 }
