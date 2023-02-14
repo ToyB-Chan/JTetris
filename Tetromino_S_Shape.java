@@ -1,7 +1,7 @@
 public class Tetromino_S_Shape extends Tetromino {
 	public Tetromino_S_Shape(int rotation) {
 		this.blocks  = new TetrominoBlock[4];
-		for (int i = 0; i < 3; i++) { 
+		for (int i = 0; i < 4; i++) { 
 			this.blocks[i] = new TetrominoBlock(0, 0, this, TerminalColor.Green); 
 		}
 

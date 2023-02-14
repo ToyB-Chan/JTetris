@@ -47,10 +47,10 @@ public class Main {
 			canvas.drawString(0, 1, keyText + pressedKeys + " ", TerminalColor.White, TerminalColor.Black);
 			pressedKeys = "";
 			tetromino.draw(canvas);
-			tetromino.relativeLocationY++;
+			//tetromino.relativeLocationY++;
 
 			canvas.renderBuffer(System.out);
-			Thread.sleep(500);
+			Thread.sleep(100);
 		}
 	}
 }
