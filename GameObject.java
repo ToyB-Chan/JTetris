@@ -3,6 +3,11 @@ public class GameObject {
 	public int relativeLocationY = 0;
 	public GameObject parent;
 
+	public void setRelativeLocation(int x, int y) {
+		this.relativeLocationX = x;
+		this.relativeLocationY = y;
+	}
+
 	public int getAbsoluteLocationX() {
 		if (this.parent == null) {
 			return this.relativeLocationX;
@@ -19,11 +24,7 @@ public class GameObject {
 		}
 	}
 
-	public void setAbsoluteLocationX(int x) {
-		
-	}
-
-	public void setAbsoluteLocationY(int y) {
+	public void setAbsoluteLocation(int x, int y) {
 		
 	}
 
