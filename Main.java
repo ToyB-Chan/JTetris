@@ -8,18 +8,23 @@ public class Main {
 		TerminalCanvas canvas = new TerminalCanvas(51, 19, TerminalColor.Black);
 		TerminalInputHook input = new TerminalInputHook();
 
+		Tetromino tetromino = new Tetromino_L_Shape(0);
+		tetromino.relativeLocationX = 5;
+		tetromino.relativeLocationY = 5;
+
 		input.startHook(System.in);
 		input.addListener(new TerminalInputListener() {
 			@Override
 			public void keyPressed(Character key) {
 				pressedKeys += key;
+
+				if (key == 'w') {
+					tetromino.setRotation((tetromino.getRotation() + 1) % 4);
+				}
 			}
 		});
 
 		
-		Tetromino_L_Shape LShape = new Tetromino_L_Shape();
-		LShape.relativeLocationX = 5;
-		LShape.relativeLocationY = 5;
 
 		
 		while (true) {
@@ -41,8 +46,8 @@ public class Main {
 			String keyText = "Keys pressed: ";
 			canvas.drawString(0, 1, keyText + pressedKeys + " ", TerminalColor.White, TerminalColor.Black);
 			pressedKeys = "";
-			LShape.draw(canvas);
-			LShape.relativeLocationY++;
+			tetromino.draw(canvas);
+			tetromino.relativeLocationY++;
 
 			canvas.renderBuffer(System.out);
 			Thread.sleep(500);
