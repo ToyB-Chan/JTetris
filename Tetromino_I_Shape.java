@@ -1,4 +1,6 @@
 public class Tetromino_I_Shape extends Tetromino {
+	
+	//Constructer
 	public Tetromino_I_Shape(int rotation) {
 		this.blocks  = new TetrominoBlock[4];
 		for (int i = 0; i < 3; i++) { 
