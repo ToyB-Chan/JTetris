@@ -4,6 +4,7 @@ public abstract class Tetromino extends GameObject {
 
 	public abstract void setRotation(int rotation);
 	public int getRotation() { return this.rotation; }
+	public boolean isGarabge() { return this.blocks == null; }
 
 	@Override
 	public void draw(TerminalCanvas canvas) {
@@ -11,6 +12,6 @@ public abstract class Tetromino extends GameObject {
 			this.blocks[i].draw(canvas);
 		}
 
-		canvas.drawPixel(relativeLocationX, relativeLocationY, TerminalColor.Red);
+		canvas.drawPixel(this.getAbsoluteLocationX(), this.getAbsoluteLocationY(), TerminalColor.Red);
 	}
 }

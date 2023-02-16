@@ -23,7 +23,7 @@ public class TerminalCanvas {
 
 	public void writeToBuffer(int x, int y, char character, TerminalColor fgColor, TerminalColor bgColor) {
 		// discard any writes outside of our bounds
-		if (x >= this.width || y >= this.height) {
+		if (x >= this.width || y >= this.height || x < 0 || y < 0) {
 			return;
 		}
 

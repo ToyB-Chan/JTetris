@@ -11,7 +11,12 @@ public class GameField extends GameObject {
 
 	public boolean canTetrominoBePlaced(int x, int y, Tetromino tetromino) {
 		for (int i = 0; i < tetromino.blocks.length; i++) {
-			if (this.grid[x + tetromino.relativeLocationX][y + tetromino.relativeLocationY] != null) {
+			TetrominoBlock block = tetromino.blocks[i];
+			if (block.relativeLocationX + x >= this.width || block.relativeLocationY + y >= this.height || block.relativeLocationX + x < 0 || block.relativeLocationY + y < 0) {
+				return false;
+			}
+
+			if (this.grid[block.relativeLocationX + x][block.relativeLocationY + y] != null) {
 				return false;
 			}
 		}
@@ -21,10 +26,26 @@ public class GameField extends GameObject {
 
 	public void addTetromino(int x, int y, Tetromino tetromino) {
 		for (int i = 0; i < tetromino.blocks.length; i++) {
-			tetromino.blocks[i].relativeLocationX += x;
-			tetromino.blocks[i].relativeLocationX += y;
-			tetromino.blocks[i].parent = this;
-			this.grid[x][y] = tetromino.blocks[i];
+			TetrominoBlock block = tetromino.blocks[i];
+			block.relativeLocationX += x;
+			block.relativeLocationY += y;
+			block.parent = this;
+			this.grid[block.relativeLocationX][block.relativeLocationY] = block;
+		}
+
+		tetromino.blocks = null;
+	}
+
+	@Override
+	public void draw(TerminalCanvas canvas) {
+		for (int x = 0; x < this.grid.length; x++) {
+			for (int y = 0; y < this.grid[x].length; y++) {
+				if (this.grid[x][y] == null) {
+					canvas.drawString(this.getAbsoluteLocationX() + x, this.getAbsoluteLocationY() + y, ".", TerminalColor.DarkGray, TerminalColor.Transparent);	
+				} else {
+					this.grid[x][y].draw(canvas);
+				}
+			}
 		}
 	}
 }
