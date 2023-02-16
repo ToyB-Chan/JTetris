@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 public class Main {
@@ -10,10 +11,11 @@ public class Main {
 		GameField gameField = new GameField(10, 20);
 		gameField.relativeLocationX = 10;
 		gameField.relativeLocationY = 10;
-		Tetromino tetromino = new Tetromino_J_Shape(0);
+		Tetromino tetromino = Tetromino.newRandomTetromino(0);
 		tetromino.parent = gameField;
 		tetromino.relativeLocationX = 5;
-		tetromino.relativeLocationY = 2;
+		tetromino.relativeLocationY = 1;
+		Random rnd = new Random();
 
 
 		input.startHook(System.in);
@@ -23,7 +25,7 @@ public class Main {
 				pressedKeys += key;
 
 				if (key == 'w') {
-					tetromino.setRotation((tetromino.getRotation() + 1) % 4);
+					//tetromino.setRotation((tetromino.getRotation() + 1) % 4);
 				}
 			}
 		});
@@ -59,7 +61,16 @@ public class Main {
 				if (gameField.canTetrominoBePlaced(tetromino.relativeLocationX, tetromino.relativeLocationY + 1, tetromino)) {
 					tetromino.relativeLocationY++;
 				} else {
+					if (tetromino.relativeLocationY == 1) {
+						System.out.println("Game end");
+						break;
+					}
+
 					gameField.addTetromino(tetromino.relativeLocationX, tetromino.relativeLocationY, tetromino);
+					tetromino = Tetromino.newRandomTetromino(rnd.nextInt(4));
+					tetromino.parent = gameField;
+					tetromino.relativeLocationX = 5;
+					tetromino.relativeLocationY = 1;
 				}
 			}
 
