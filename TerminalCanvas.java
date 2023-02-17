@@ -27,11 +27,11 @@ public class TerminalCanvas {
 			return;
 		}
 
-		if (fgColor.isTransparent) {
+		if (fgColor == TerminalColor.TRANSPARENT) {
 			character = ' ';
 		}
 
-		if (bgColor.isTransparent) {
+		if (bgColor == TerminalColor.TRANSPARENT) {
 			bgColor = buffer[x][y].bgColor;
 		}
 
@@ -68,16 +68,16 @@ public class TerminalCanvas {
 				// set foregrund color 
 				s += "\033[";
 				s += "38;2;";
-				s += pixel.fgColor.r + ";";
-				s += pixel.fgColor.g + ";";
-				s += pixel.fgColor.b + "m";
+				s += pixel.fgColor.R + ";";
+				s += pixel.fgColor.G + ";";
+				s += pixel.fgColor.B + "m";
 
 				// set background color
 				s += "\033[";
 				s += "48;2;";
-				s += pixel.bgColor.r + ";";
-				s += pixel.bgColor.g + ";";
-				s += pixel.bgColor.b + "m";
+				s += pixel.bgColor.R + ";";
+				s += pixel.bgColor.G + ";";
+				s += pixel.bgColor.B + "m";
 
 				// set text
 				s += buffer[ix][iy].character; 

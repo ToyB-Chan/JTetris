@@ -2,7 +2,7 @@ public class Tetromino_Z_Shape extends Tetromino {
 	public Tetromino_Z_Shape(int rotation) {
 		this.blocks  = new TetrominoBlock[4];
 		for (int i = 0; i < 4; i++) { 
-			this.blocks[i] = new TetrominoBlock(0, 0, this, TerminalColor.red); 
+			this.blocks[i] = new TetrominoBlock(0, 0, this, TerminalColor.RED); 
 		}
 
 		this.setRotation(rotation);	

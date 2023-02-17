@@ -6,7 +6,7 @@ public class Main {
 	static String pressedKeys = "";
 
 	public static void main(String[] args) throws InterruptedException, IOException, ExecutionException {
-		TerminalCanvas canvas = new TerminalCanvas(71, 39, TerminalColor.black);
+		TerminalCanvas canvas = new TerminalCanvas(71, 39, TerminalColor.BLACK);
 		TerminalInputHook input = new TerminalInputHook();
 		GameField gameField = new GameField(10, 20);
 		gameField.relativeLocationX = 10;
@@ -43,9 +43,9 @@ public class Main {
 			}
 
 			String canvasText = "=== JTetris ===";
-			canvas.drawString((canvas.width() / 2) - (canvasText.length() / 2), 0, canvasText, TerminalColor.green, TerminalColor.black);
+			canvas.drawString((canvas.width() / 2) - (canvasText.length() / 2), 0, canvasText, TerminalColor.GREEN, TerminalColor.BLACK);
 			String keyText = "Keys pressed: ";
-			canvas.drawString(0, 1, keyText + pressedKeys + " ", TerminalColor.white, TerminalColor.black);
+			canvas.drawString(0, 1, keyText + pressedKeys + " ", TerminalColor.WHITE, TerminalColor.BLACK);
 			pressedKeys = "";
 			gameField.draw(canvas);
 			tetromino.draw(canvas);
