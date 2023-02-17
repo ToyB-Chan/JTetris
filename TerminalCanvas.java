@@ -51,48 +51,64 @@ public class TerminalCanvas {
 	}
 
 	public void renderBuffer(PrintStream stream) {
-		stream.print("\033[8;" + this.height + ";" + this.width + "t"); // set terminal window dimension to canvas dimension
-		stream.print("\033[?25l"); // disable cursor
+		int widthScale = 2;
+		String outString = "";
+		
+		outString += "\033[8;" + this.height + ";" + this.width * widthScale + "t"; // set terminal window dimension to canvas dimension
+		outString += "\033[?25l"; // disable cursor
 
 		if (this.shouldClearTerminal) {
-			stream.print("\033[2J"); // clear terminal
+			outString += "\033[2J"; // clear terminal
 			this.shouldClearTerminal = false;
 		}
 
-		stream.print("\033[H"); // set cursor to 0, 0
+		outString += "\033[H"; // set cursor to 0, 0
+		TerminalColor lastFgColor = null;
+		TerminalColor lastBgColor = null;
+
 		for (int iy = 0; iy < this.height; iy++) {
 			for (int ix = 0; ix < this.width; ix++) {
 				TerminalPixel pixel = buffer[ix][iy];
-				String s = "";
-				
-				// set foregrund color 
-				s += "\033[";
-				s += "38;2;";
-				s += pixel.fgColor.R + ";";
-				s += pixel.fgColor.G + ";";
-				s += pixel.fgColor.B + "m";
 
-				// set background color
-				s += "\033[";
-				s += "48;2;";
-				s += pixel.bgColor.R + ";";
-				s += pixel.bgColor.G + ";";
-				s += pixel.bgColor.B + "m";
+				if (pixel.fgColor != lastFgColor) {
+					// set foregrund color 
+					outString += "\033[";
+					outString += "38;2;";
+					outString += pixel.fgColor.R + ";";
+					outString += pixel.fgColor.G + ";";
+					outString += pixel.fgColor.B + "m";
+					lastFgColor = pixel.fgColor;
+				}
+
+				if  (pixel.bgColor != lastBgColor) {
+					// set background color
+					outString += "\033[";
+					outString += "48;2;";
+					outString += pixel.bgColor.R + ";";
+					outString += pixel.bgColor.G + ";";
+					outString += pixel.bgColor.B + "m";
+					lastBgColor = pixel.bgColor;
+				}
 
 				// set text
-				s += buffer[ix][iy].character; 
+				outString += buffer[ix][iy].character;
 
-				// push to stream
-				stream.print(s);
+				// strech if width scale > 1
+				for (int i = 1; i < widthScale; i++) {
+					outString += " ";
+				} 
 			}
 
 			// only print a new line if we are not at the end of the loop
 			if (iy + 1 < this.height) {
-				stream.print('\n');
+				outString += '\n';
 			}
 		}
 
-		stream.print("\033[0;0m"); // reset all formating
+		outString += "\033[0;0m"; // reset all formating
+
+		// push to stream and clear buffer
+		stream.print(outString);
 		this.clearBuffer();
 	}
 
