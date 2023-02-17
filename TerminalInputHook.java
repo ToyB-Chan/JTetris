@@ -1,11 +1,12 @@
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class TerminalInputHook {
 	private boolean active;
 	private volatile ConcurrentLinkedQueue<Character> queue = new ConcurrentLinkedQueue<Character>();
-	private ArrayList<TerminalInputListener> listeners = new ArrayList<TerminalInputListener>();
+	private List<Character> pressedKeys = new ArrayList<Character>();
 	private Thread hookThread;
 
 	public void startHook(InputStream stream) {
@@ -40,17 +41,24 @@ public class TerminalInputHook {
 	}
 
 	public void update() {
+		this.pressedKeys.clear();
+
 		while (!queue.isEmpty()) {
-			Character key = queue.poll();
-			for (int i = 0; i < listeners.size(); i++) {
-				if (listeners.get(i).key == key || listeners.get(i).key == Character.MIN_VALUE) {
-					listeners.get(i).keyPressed(key);
-				}
-			}
+			this.pressedKeys.add(queue.poll());
 		}
 	}
 
 	public boolean active() { return this.active; }
-	public void addListener(TerminalInputListener listener) { this.listeners.add(listener); }
-	public void removeListener(TerminalInputListener listener) { this.listeners.remove(listener); }
+	public boolean isKeyPressed(char key) {
+		return this.pressedKeys.contains(key);
+	}
+
+	public List<Character> getPressedKeys() {
+		List<Character> copy = new ArrayList<Character>();
+		for (int i = 0; i < this.pressedKeys.size(); i++) {
+			copy.add(this.pressedKeys.get(i));
+		}
+		
+		return copy;
+	}
 }

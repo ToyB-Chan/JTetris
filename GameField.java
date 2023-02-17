@@ -26,7 +26,7 @@ public class GameField extends GameObject {
 
 	public void addTetromino(int x, int y, Tetromino tetromino) {
 		for (int i = 0; i < tetromino.blocks.length; i++) {
-			TetrominoBlock block = tetromino.blocks[i];
+			TetrominoBlock block = tetromino.blocks[i].copy();
 			block.relativeLocationX += x;
 			block.relativeLocationY += y;
 			block.parent = this;

@@ -8,6 +8,10 @@ public class TetrominoBlock extends GameObject {
 		this.color = color;
 	}
 
+	public TetrominoBlock copy() {
+		return new TetrominoBlock(this.relativeLocationX, this.relativeLocationY, this.parent, this.color);
+	}
+
 	@Override
 	public void draw(TerminalCanvas canvas) {
 		canvas.drawString(this.getAbsoluteLocationX(), this.getAbsoluteLocationY(), "L", TerminalColor.White, this.color);
