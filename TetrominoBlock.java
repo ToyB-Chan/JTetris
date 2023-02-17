@@ -14,6 +14,6 @@ public class TetrominoBlock extends GameObject {
 
 	@Override
 	public void draw(TerminalCanvas canvas) {
-		canvas.drawString(this.getAbsoluteLocationX(), this.getAbsoluteLocationY(), "L", TerminalColor.White, this.color);
+		canvas.drawString(this.getAbsoluteLocationX(), this.getAbsoluteLocationY(), "L", TerminalColor.white, this.color);
 	}
 }

@@ -27,11 +27,11 @@ public class TerminalCanvas {
 			return;
 		}
 
-		if (fgColor == TerminalColor.Transparent) {
+		if (fgColor.isTransparent) {
 			character = ' ';
 		}
 
-		if (bgColor == TerminalColor.Transparent) {
+		if (bgColor.isTransparent) {
 			bgColor = buffer[x][y].bgColor;
 		}
 
@@ -62,8 +62,28 @@ public class TerminalCanvas {
 		stream.print("\033[H"); // set cursor to 0, 0
 		for (int iy = 0; iy < this.height; iy++) {
 			for (int ix = 0; ix < this.width; ix++) {
-				stream.print("\033[" + buffer[ix][iy].fgColor.fgAnsiCode() + ";" + buffer[ix][iy].bgColor.bgAnsiCode() + "m"); // set fg/bg color
-				stream.print(buffer[ix][iy].character);
+				TerminalPixel pixel = buffer[ix][iy];
+				String s = "";
+				
+				// set foregrund color 
+				s += "\033[";
+				s += "38;2;";
+				s += pixel.fgColor.r + ";";
+				s += pixel.fgColor.g + ";";
+				s += pixel.fgColor.b + "m";
+
+				// set background color
+				s += "\033[";
+				s += "48;2;";
+				s += pixel.bgColor.r + ";";
+				s += pixel.bgColor.g + ";";
+				s += pixel.bgColor.b + "m";
+
+				// set text
+				s += buffer[ix][iy].character; 
+
+				// push to stream
+				stream.print(s);
 			}
 
 			// only print a new line if we are not at the end of the loop

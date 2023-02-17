@@ -41,7 +41,7 @@ public class GameField extends GameObject {
 		for (int x = 0; x < this.grid.length; x++) {
 			for (int y = 0; y < this.grid[x].length; y++) {
 				if (this.grid[x][y] == null) {
-					canvas.drawString(this.getAbsoluteLocationX() + x, this.getAbsoluteLocationY() + y, ".", TerminalColor.DarkGray, TerminalColor.Transparent);	
+					canvas.drawString(this.getAbsoluteLocationX() + x, this.getAbsoluteLocationY() + y, ".", TerminalColor.darkGray, TerminalColor.transparent);	
 				} else {
 					this.grid[x][y].draw(canvas);
 				}
