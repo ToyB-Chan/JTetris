@@ -27,7 +27,7 @@ public class TerminalColor {
 	public static final TerminalColor DARK_CYAN = new TerminalColor(0, 139, 139);
 	public static final TerminalColor DARK_GRAY = new TerminalColor(77, 77, 77);
 	public static final TerminalColor LIGHT_GRAY = new TerminalColor(161, 161, 161);
-	public static final TerminalColor RED = new TerminalColor(255, 0, 0);
+	public static final TerminalColor RED = new TerminalColor(205, 0, 0);
 	public static final TerminalColor GREEN = new TerminalColor(0, 205, 0);
 	public static final TerminalColor YELLOW = new TerminalColor(255, 215, 0);
 	public static final TerminalColor BLUE = new TerminalColor(30, 144, 255);
