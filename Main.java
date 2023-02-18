@@ -41,8 +41,12 @@ public class Main {
 							tetromino.relativeLocationY -= i;
 							break;
 						}
+
+						// if we are at the end of the loop
+						if (i + 1  >= 4) {
+							tetromino.setRotation((tetromino.getRotation() - 1) % 4);
+						}
 					}
-					
 				}
 			}
 
