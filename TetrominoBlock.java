@@ -1,17 +1,21 @@
 public class TetrominoBlock extends GameObject {
-	TerminalColor baseColor;
-	TerminalColor highlightColor;
+	public TerminalColor baseColor;
+	public TerminalColor highlightColor;
 
 	public TetrominoBlock(int x, int y, GameObject parent, TerminalColor color) {
 		this.relativeLocationX = x;
 		this.relativeLocationY = y;
 		this.parent = parent;
 		this.baseColor = color;
-		this.highlightColor = new TerminalColor(color.R + 32, color.G + 32, color.B + 32);
+		this.generateHighlightColor();
 	}
 
 	public TetrominoBlock copy() {
 		return new TetrominoBlock(this.relativeLocationX, this.relativeLocationY, this.parent, this.baseColor);
+	}
+
+	public void generateHighlightColor() {
+		this.highlightColor = new TerminalColor(this.baseColor.R + 32, this.baseColor.G + 32, this.baseColor.B + 32);
 	}
 
 	@Override

@@ -3,6 +3,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 public class Main {
+	static final int TARGET_FRAME_TIME = 16;
 	static String pressedKeys = "";
 
 	public static void main(String[] args) throws InterruptedException, IOException, ExecutionException {
@@ -17,6 +18,7 @@ public class Main {
 		tetromino.relativeLocationY = 1;
 		Random rnd = new Random();
 		input.startHook(System.in);
+		Timer fallTimer = new Timer(250);
 		
 		while (true) {
 			input.update();
@@ -50,23 +52,29 @@ public class Main {
 			gameField.draw(canvas);
 			tetromino.draw(canvas);
 
-			if (gameField.canTetrominoBePlaced(tetromino.relativeLocationX, tetromino.relativeLocationY + 1, tetromino)) {
-				tetromino.relativeLocationY++;
-			} else {
-				if (tetromino.relativeLocationY == 1) {
-					System.out.println("Game end");
-					break;
-				}
+			if (fallTimer.shouldExecute) {
+				if (gameField.canTetrominoBePlaced(tetromino.relativeLocationX, tetromino.relativeLocationY + 1, tetromino)) {
+					tetromino.relativeLocationY++;
+				} else {
+					if (tetromino.relativeLocationY == 1) {
+						System.out.println("Game end");
+						break;
+					}
 
-				gameField.addTetromino(tetromino.relativeLocationX, tetromino.relativeLocationY, tetromino);
-				tetromino = Tetromino.newRandomTetromino(rnd.nextInt(4));
-				tetromino.parent = gameField;
-				tetromino.relativeLocationX = 5;
-				tetromino.relativeLocationY = 1;
+					if (gameField.canTetrominoBePlaced(tetromino.relativeLocationX, tetromino.relativeLocationY, tetromino))
+					{
+						gameField.addTetromino(tetromino.relativeLocationX, tetromino.relativeLocationY, tetromino);
+						tetromino = Tetromino.newRandomTetromino(rnd.nextInt(4));
+						tetromino.parent = gameField;
+						tetromino.relativeLocationX = 5;
+						tetromino.relativeLocationY = 1;
+					}
+				}
 			}
 
 			canvas.renderBuffer(System.out);
-			Thread.sleep(200);
+			fallTimer.update(TARGET_FRAME_TIME);
+			Thread.sleep(TARGET_FRAME_TIME);
 		}
 	}
 }
