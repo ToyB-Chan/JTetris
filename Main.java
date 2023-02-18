@@ -24,6 +24,26 @@ public class Main {
 			input.update();
 			if (input.isKeyPressed('w')) {
 				tetromino.setRotation((tetromino.getRotation() + 1) % 4);
+				
+				if (!gameField.canTetrominoBePlaced(tetromino.relativeLocationX, tetromino.relativeLocationY, tetromino)) {
+					for (int i = 0; i < 4; i++) {
+						if (gameField.canTetrominoBePlaced(tetromino.relativeLocationX + i, tetromino.relativeLocationY, tetromino)) {
+							tetromino.relativeLocationX += i;
+							break;
+						}
+
+						if (gameField.canTetrominoBePlaced(tetromino.relativeLocationX - i, tetromino.relativeLocationY, tetromino)) {
+							tetromino.relativeLocationX -= i;
+							break;
+						}
+
+						if (gameField.canTetrominoBePlaced(tetromino.relativeLocationX, tetromino.relativeLocationY - i, tetromino)) {
+							tetromino.relativeLocationY -= i;
+							break;
+						}
+					}
+					
+				}
 			}
 
 			if (input.isKeyPressed('a') && gameField.canTetrominoBePlaced(tetromino.relativeLocationX - 1, tetromino.relativeLocationY, tetromino)) {
