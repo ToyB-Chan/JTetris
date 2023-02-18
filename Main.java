@@ -10,6 +10,7 @@ public class Main {
 		TerminalCanvas canvas = new TerminalCanvas(71, 39, TerminalColor.BLACK);
 		TerminalInputHook input = new TerminalInputHook();
 		GameField gameField = new GameField(10, 20);
+		UserInterface userInterface = new UserInterface();
 		gameField.relativeLocationX = 10;
 		gameField.relativeLocationY = 10;
 		Tetromino tetromino = Tetromino.newRandomTetromino(0);
@@ -73,6 +74,7 @@ public class Main {
 			String keyText = "Keys pressed: ";
 			canvas.drawString(0, 1, keyText + pressedKeys + " ", TerminalColor.WHITE, TerminalColor.BLACK);
 			pressedKeys = "";
+			userInterface.draw(canvas);
 			gameField.draw(canvas);
 			tetromino.draw(canvas);
 
