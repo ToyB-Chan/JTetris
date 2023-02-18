@@ -22,7 +22,7 @@ public class Main {
 		
 		while (true) {
 			input.update();
-			if (input.isKeyPressed('w')) {
+			if (input.isKeyPressed('w') || input.isKeyPressed('W')) {
 				tetromino.setRotation((tetromino.getRotation() + 1) % 4);
 				
 				if (!gameField.canTetrominoBePlaced(tetromino.relativeLocationX, tetromino.relativeLocationY, tetromino)) {
@@ -50,15 +50,15 @@ public class Main {
 				}
 			}
 
-			if (input.isKeyPressed('a') && gameField.canTetrominoBePlaced(tetromino.relativeLocationX - 1, tetromino.relativeLocationY, tetromino)) {
+			if ((input.isKeyPressed('a')||input.isKeyPressed('A')) && gameField.canTetrominoBePlaced(tetromino.relativeLocationX - 1, tetromino.relativeLocationY, tetromino)) {
 				tetromino.relativeLocationX--;
 			}
 
-			if (input.isKeyPressed('d') && gameField.canTetrominoBePlaced(tetromino.relativeLocationX + 1, tetromino.relativeLocationY, tetromino)) {
+			if ((input.isKeyPressed('d')||input.isKeyPressed('D')) && gameField.canTetrominoBePlaced(tetromino.relativeLocationX + 1, tetromino.relativeLocationY, tetromino)) {
 				tetromino.relativeLocationX++;
 			}
 
-			if (input.isKeyPressed('s') && gameField.canTetrominoBePlaced(tetromino.relativeLocationX, tetromino.relativeLocationY + 1, tetromino)) {
+			if ((input.isKeyPressed('s')||input.isKeyPressed('S')) && gameField.canTetrominoBePlaced(tetromino.relativeLocationX, tetromino.relativeLocationY + 1, tetromino)) {
 				tetromino.relativeLocationY++;
 			}
 
