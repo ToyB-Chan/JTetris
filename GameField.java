@@ -48,4 +48,23 @@ public class GameField extends GameObject {
 			}
 		}
 	}
+
+	public int removeFullRows(){
+		int rowsRemoved = 0;
+
+		for(int iy = 0; iy < this.height; iy++) {
+			boolean isRowFull = true;
+
+			for (int ix = 0; ix < this.width; ix++) {
+				isRowFull = isRowFull && this.grid[ix][iy] != null;
+			}
+
+			if (isRowFull) {
+				rowsRemoved++;
+
+			}
+		}
+
+		return rowsRemoved;
+	}
 }
