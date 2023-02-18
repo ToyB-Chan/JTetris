@@ -1,6 +1,7 @@
 import java.util.Random;
 
 public abstract class Tetromino extends GameObject {
+	protected static Random random = new Random();
 	public TetrominoBlock[] blocks;
 	protected int rotation = 0;
 
@@ -17,9 +18,7 @@ public abstract class Tetromino extends GameObject {
 	}
 
 	public static Tetromino newRandomTetromino(int rotation) {
-		Random rnd = new Random();
-		int i = rnd.nextInt(7);
-
+		int i = random.nextInt(7);
 		switch (i) {
 			case 0: return new Tetromino_I_Shape(rotation);
 			case 1: return new Tetromino_J_Shape(rotation);
