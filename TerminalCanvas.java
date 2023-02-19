@@ -5,14 +5,15 @@ public class TerminalCanvas {
 	private int width;
 	private int height;
 	private TerminalPixel[][] buffer;
-	public boolean shouldClearTerminal;
+	public boolean clearTerminal;
+	public boolean invertColors;
 	public TerminalColor clearColor;
 
 	public TerminalCanvas (int width, int height, TerminalColor clearColor) {
 		this.width = width;
 		this.height = height;
 		this.buffer = new TerminalPixel[width][height];
-		this.shouldClearTerminal = true;
+		this.clearTerminal = true;
 		this.clearColor = clearColor;
 		for (int ix = 0; ix < width; ix++) {
 			for (int iy = 0; iy < height; iy++) {
@@ -57,9 +58,9 @@ public class TerminalCanvas {
 		outString += "\033[8;" + this.height + ";" + this.width * widthScale + "t"; // set terminal window dimension to canvas dimension
 		outString += "\033[?25l"; // disable cursor
 
-		if (this.shouldClearTerminal) {
+		if (this.clearTerminal) {
 			outString += "\033[2J"; // clear terminal
-			this.shouldClearTerminal = false;
+			this.clearTerminal = false;
 		}
 
 		outString += "\033[H"; // set cursor to 0, 0
@@ -74,9 +75,17 @@ public class TerminalCanvas {
 					// set foregrund color 
 					outString += "\033[";
 					outString += "38;2;";
-					outString += pixel.fgColor.R + ";";
-					outString += pixel.fgColor.G + ";";
-					outString += pixel.fgColor.B + "m";
+
+					if (this.invertColors) {
+						outString += 255 - pixel.fgColor.R + ";";
+						outString += 255 - pixel.fgColor.G + ";";
+						outString += 255 - pixel.fgColor.B + "m";
+					} else {
+						outString += pixel.fgColor.R + ";";
+						outString += pixel.fgColor.G + ";";
+						outString += pixel.fgColor.B + "m";
+					}
+
 					lastFgColor = pixel.fgColor;
 				}
 
@@ -84,9 +93,17 @@ public class TerminalCanvas {
 					// set background color
 					outString += "\033[";
 					outString += "48;2;";
-					outString += pixel.bgColor.R + ";";
-					outString += pixel.bgColor.G + ";";
-					outString += pixel.bgColor.B + "m";
+
+					if (this.invertColors) {
+						outString += 255 - pixel.bgColor.R + ";";
+						outString += 255 - pixel.bgColor.G + ";";
+						outString += 255 - pixel.bgColor.B + "m";
+					} else {
+						outString += pixel.bgColor.R + ";";
+						outString += pixel.bgColor.G + ";";
+						outString += pixel.bgColor.B + "m";
+					}
+					
 					lastBgColor = pixel.bgColor;
 				}
 

@@ -15,7 +15,7 @@ public class TetrominoBlock extends GameObject {
 	}
 
 	public void generateHighlightColor() {
-		this.highlightColor = new TerminalColor(this.baseColor.R + 32, this.baseColor.G + 32, this.baseColor.B + 32);
+		this.highlightColor = new TerminalColor(this.baseColor.R + 38, this.baseColor.G + 38, this.baseColor.B + 38);
 	}
 
 	@Override

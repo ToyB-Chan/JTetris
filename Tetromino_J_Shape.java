@@ -2,12 +2,7 @@ public class Tetromino_J_Shape extends Tetromino {
 	
 	//Constructer 
 	public Tetromino_J_Shape(int rotation) {
-		this.blocks  = new TetrominoBlock[4];
-		for (int i = 0; i < 4; i++) { 
-			this.blocks[i] = new TetrominoBlock(0, 0, this, TerminalColor.DARK_BLUE); 
-		}
-
-		this.setRotation(rotation);	
+		super(rotation, 4, TerminalColor.DARK_BLUE);
 	}
 
 

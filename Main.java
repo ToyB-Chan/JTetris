@@ -4,20 +4,19 @@ import java.util.concurrent.ExecutionException;
 
 public class Main {
 	static final int TARGET_FRAME_TIME = 16;
-	static String pressedKeys = "";
 
 	public static void main(String[] args) throws InterruptedException, IOException, ExecutionException {
 		TerminalCanvas canvas = new TerminalCanvas(71, 39, TerminalColor.BLACK);
 		TerminalInputHook input = new TerminalInputHook();
 		GameField gameField = new GameField(10, 20);
 		UserInterface userInterface = new UserInterface();
+		Random random = new Random();
 		gameField.relativeLocationX = 10;
 		gameField.relativeLocationY = 10;
-		Tetromino tetromino = Tetromino.newRandomTetromino(0);
+		Tetromino tetromino = Tetromino.newTetrominoFromIndex(random.nextInt(Tetromino.LAST_INDEX + 1), 0);
 		tetromino.parent = gameField;
 		tetromino.relativeLocationX = 5;
 		tetromino.relativeLocationY = 1;
-		Random rnd = new Random();
 		input.startHook(System.in);
 		Timer fallTimer = new Timer(250);
 		
@@ -43,7 +42,7 @@ public class Main {
 							break;
 						}
 
-						// if we are at the end of the loop
+						// if we are at the end of the loop we were not able to find a valid place, thus we rotate it back.
 						if (i + 1  >= 4) {
 							tetromino.setRotation((tetromino.getRotation() - 1) % 4);
 						}
@@ -51,15 +50,15 @@ public class Main {
 				}
 			}
 
-			if ((input.isKeyPressed('a')||input.isKeyPressed('A')) && gameField.canTetrominoBePlaced(tetromino.relativeLocationX - 1, tetromino.relativeLocationY, tetromino)) {
+			if ((input.isKeyPressed('a') || input.isKeyPressed('A')) && gameField.canTetrominoBePlaced(tetromino.relativeLocationX - 1, tetromino.relativeLocationY, tetromino)) {
 				tetromino.relativeLocationX--;
 			}
 
-			if ((input.isKeyPressed('d')||input.isKeyPressed('D')) && gameField.canTetrominoBePlaced(tetromino.relativeLocationX + 1, tetromino.relativeLocationY, tetromino)) {
+			if ((input.isKeyPressed('d') || input.isKeyPressed('D')) && gameField.canTetrominoBePlaced(tetromino.relativeLocationX + 1, tetromino.relativeLocationY, tetromino)) {
 				tetromino.relativeLocationX++;
 			}
 
-			if ((input.isKeyPressed('s')||input.isKeyPressed('S')) && gameField.canTetrominoBePlaced(tetromino.relativeLocationX, tetromino.relativeLocationY + 1, tetromino)) {
+			if ((input.isKeyPressed('s') || input.isKeyPressed('S')) && gameField.canTetrominoBePlaced(tetromino.relativeLocationX, tetromino.relativeLocationY + 1, tetromino)) {
 				tetromino.relativeLocationY++;
 			}
 
@@ -69,11 +68,19 @@ public class Main {
 				}
 			}
 
+			for (int i = 0; i <= Tetromino.LAST_INDEX; i++) {
+				if (i < 10 && input.isKeyPressed(String.valueOf(i).charAt(0))) {
+					tetromino = Tetromino.newTetrominoFromIndex(i - 1, 0);
+					tetromino.parent = gameField;
+					tetromino.relativeLocationX = 5;
+					tetromino.relativeLocationY = 1;
+				}
+			}
+
 			String canvasText = "=== JTetris ===";
 			canvas.drawString((canvas.width() / 2) - (canvasText.length() / 2), 0, canvasText, TerminalColor.GREEN, TerminalColor.BLACK);
 			String keyText = "Keys pressed: ";
-			canvas.drawString(0, 1, keyText + pressedKeys + " ", TerminalColor.WHITE, TerminalColor.BLACK);
-			pressedKeys = "";
+			canvas.drawString(0, 1, keyText + input.getPressedKeys().toString() + " ", TerminalColor.WHITE, TerminalColor.BLACK);
 			userInterface.draw(canvas);
 			gameField.draw(canvas);
 			tetromino.draw(canvas);
@@ -87,13 +94,13 @@ public class Main {
 						break;
 					}
 
-					if (gameField.canTetrominoBePlaced(tetromino.relativeLocationX, tetromino.relativeLocationY, tetromino))
-					{
+					if (gameField.canTetrominoBePlaced(tetromino.relativeLocationX, tetromino.relativeLocationY, tetromino)) {
 						gameField.addTetromino(tetromino.relativeLocationX, tetromino.relativeLocationY, tetromino);
-						tetromino = Tetromino.newRandomTetromino(rnd.nextInt(4));
+						tetromino = Tetromino.newTetrominoFromIndex(random.nextInt(Tetromino.LAST_INDEX + 1), 0);
 						tetromino.parent = gameField;
 						tetromino.relativeLocationX = 5;
 						tetromino.relativeLocationY = 1;
+						canvas.invertColors = !canvas.invertColors;
 					}
 				}
 			}
