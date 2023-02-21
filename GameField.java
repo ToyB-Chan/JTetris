@@ -61,13 +61,23 @@ public class GameField extends GameObject {
 
 			if (isRowFull) {
 				rowsRemoved++;
-				for(int fx = 0; fx < this.width;fx++){
-					this.grid[fx][iy] = new TetrominoBlock(fx, iy, parent, null);
+				for(int fx = 0; fx < this.width; fx++){
+					this.grid[fx][iy] = null;
 				}
+				for(int py = iy ; py > 0 ; py--){
+					for (int fx = 0 ; fx < this.width; fx++){
+						this.grid[fx][py] = this.grid[fx][py-1];
+					}
 
+				}	
+					
+					
+				
+				
 			}
 		}
 
 		return rowsRemoved;
 	}
 }
+
