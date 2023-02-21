@@ -95,6 +95,8 @@ public class Main {
 			}
 			// Update ghost end 
 
+			gameField.removeFullRows();
+
 			// Draw start
 			String canvasText = "=== JTetris ===";
 			canvas.drawString((canvas.width() / 2) - (canvasText.length() / 2), 0, canvasText, TerminalColor.GREEN, TerminalColor.BLACK);

@@ -67,13 +67,13 @@ public class GameField extends GameObject {
 				for(int py = iy ; py > 0 ; py--){
 					for (int fx = 0 ; fx < this.width; fx++){
 						this.grid[fx][py] = this.grid[fx][py-1];
+
+						if (this.grid[fx][py] != null) {
+							this.grid[fx][py].relativeLocationY++;
+						}
 					}
 
 				}	
-					
-					
-				
-				
 			}
 		}
 
