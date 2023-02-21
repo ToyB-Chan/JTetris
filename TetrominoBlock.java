@@ -1,6 +1,7 @@
 public class TetrominoBlock extends GameObject {
 	public TerminalColor baseColor;
 	public TerminalColor highlightColor;
+	public boolean renderAsGhost = false;
 
 	public TetrominoBlock(int x, int y, GameObject parent, TerminalColor color) {
 		this.relativeLocationX = x;
@@ -20,6 +21,10 @@ public class TetrominoBlock extends GameObject {
 
 	@Override
 	public void draw(TerminalCanvas canvas) {
-		canvas.drawString(this.getAbsoluteLocationX(), this.getAbsoluteLocationY(), "L", this.highlightColor, this.baseColor);
+		if (this.renderAsGhost) {
+			canvas.drawString(this.getAbsoluteLocationX(), this.getAbsoluteLocationY(), "M", this.baseColor, TerminalColor.TRANSPARENT);
+		} else {
+			canvas.drawString(this.getAbsoluteLocationX(), this.getAbsoluteLocationY(), "L", this.highlightColor, this.baseColor);
+		}
 	}
 }

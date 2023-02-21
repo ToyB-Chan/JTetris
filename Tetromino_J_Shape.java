@@ -5,7 +5,7 @@ public class Tetromino_J_Shape extends Tetromino {
 		super(rotation, 4, TerminalColor.DARK_BLUE);
 	}
 
-
+	@Override
 	public void setRotation(int rotation) {
 		this.rotation = rotation;
 
@@ -35,6 +35,14 @@ public class Tetromino_J_Shape extends Tetromino {
 				this.blocks[3].setRelativeLocation(-1, 1);
 				break;
 		}
-		
+	}
+
+	@Override
+	public Tetromino copy() {
+		Tetromino cTetromino = new Tetromino_J_Shape(rotation);
+		cTetromino.parent = this.parent;
+		cTetromino.relativeLocationX = this.relativeLocationX;
+		cTetromino.relativeLocationY = this.relativeLocationY;
+		return cTetromino; 
 	}
 }

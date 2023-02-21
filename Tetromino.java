@@ -1,5 +1,7 @@
+import java.util.Random;
+
 public abstract class Tetromino extends GameObject {
-	protected static final int LAST_INDEX = 6;
+	public static Random rand = new Random();
 	public TetrominoBlock[] blocks;
 	protected int rotation = 0;
 
@@ -15,6 +17,8 @@ public abstract class Tetromino extends GameObject {
 	public abstract void setRotation(int rotation);
 	public int getRotation() { return this.rotation; }
 
+	public abstract Tetromino copy();
+
 	@Override
 	public void draw(TerminalCanvas canvas) {
 		for (int i = 0 ; i < blocks.length; i++) {
@@ -24,9 +28,8 @@ public abstract class Tetromino extends GameObject {
 		//canvas.drawPixel(this.getAbsoluteLocationX(), this.getAbsoluteLocationY(), TerminalColor.Red);
 	}
 
-	public static Tetromino newTetrominoFromIndex(int index, int rotation) {
-		// clamp index between 0 - LAST_INDEX
-		index = index > LAST_INDEX ? LAST_INDEX : index < 0 ? 0 : index;
+	public static Tetromino newRandomTetromino(int rotation) {
+		int index = rand.nextInt(7);
 
 		switch (index) {
 			case 0: return new Tetromino_I_Shape(rotation);

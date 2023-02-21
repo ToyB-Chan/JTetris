@@ -79,5 +79,8 @@ public class GameField extends GameObject {
 
 		return rowsRemoved;
 	}
+
+	public int width() { return this.width; }
+	public int height() { return this.height; }
 }
 

@@ -34,4 +34,13 @@ public class Tetromino_T_Shape extends Tetromino {
 				break;
 		}
 	}
+
+	@Override
+	public Tetromino copy() {
+		Tetromino cTetromino = new Tetromino_T_Shape(rotation);
+		cTetromino.parent = this.parent;
+		cTetromino.relativeLocationX = this.relativeLocationX;
+		cTetromino.relativeLocationY = this.relativeLocationY;
+		return cTetromino; 
+	}
 }
