@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class TerminalColor {
 	public final int R;
 	public final int G;
@@ -16,6 +18,29 @@ public class TerminalColor {
 
 	public TerminalColor getInverted() {
 		return new TerminalColor(255 - this.R, 255 - this.G, 255 - this.B);
+	}
+
+	public static TerminalColor getRandomColor(int seed) {
+		int random = new Random(seed).nextInt(5);
+
+		switch(random) {
+			case (0):
+		  		return TerminalColor.BLUE;
+
+			case (1):
+				return TerminalColor.RED;
+
+			case (2):
+			 	return TerminalColor.YELLOW;
+
+			case (3):
+			 	return TerminalColor.GREEN;
+
+			case (4):
+				return TerminalColor.MAGENTA;
+			
+			default: return null; // Should never happen
+		}		
 	}
 
 	public static final TerminalColor BLACK = new TerminalColor(0, 0, 0);
