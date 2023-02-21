@@ -61,6 +61,9 @@ public class GameField extends GameObject {
 
 			if (isRowFull) {
 				rowsRemoved++;
+				for(int fx = 0; fx < this.width;fx++){
+					this.grid[fx][iy] = new TetrominoBlock(fx, iy, parent, null);
+				}
 
 			}
 		}
