@@ -98,7 +98,7 @@ public class Main {
 			gameField.removeFullRows();
 
 			// Draw start
-			String canvasText = "=== JTetris ===";
+			String canvasText = "=== J Tetris ===";
 			canvas.drawString((canvas.width() / 2) - (canvasText.length() / 2), 0, canvasText, TerminalColor.GREEN, TerminalColor.BLACK);
 			String keyText = "Keys pressed: ";
 			canvas.drawString(0, 1, keyText + input.getPressedKeys().toString() + " ", TerminalColor.WHITE, TerminalColor.BLACK);
