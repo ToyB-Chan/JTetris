@@ -3,7 +3,7 @@ public class UserInterface extends GameObject {
 	public int width =10;
 	public int height =20;
 	public int time = 0;
-	public float speed = 0.01f;
+	public float speed = 0.0005f;
 
 	public UserInterface (){
 	//this.width = width;
