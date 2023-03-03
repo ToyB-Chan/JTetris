@@ -21,7 +21,6 @@ public class Game {
 
 	// States
 	public boolean tetrominoSwapped;
-	public boolean forcePlaced;
 	public boolean gameEnded;
 
 	public Game() {
@@ -29,33 +28,74 @@ public class Game {
 		this.gameField = new GameField(10, 20);
 		this.fallTimer = new Timer(250);
 		this.userInterface = new UserInterface();
+		
+		this.setActiveTetromino(Tetromino.newRandomTetromino(0));
+		this.swapTetromino = Tetromino.newRandomTetromino(0);
+		for (int i = 0; i < this.nextTetrominos.length; i++) {
+			this.nextTetrominos[i] = Tetromino.newRandomTetromino(0);
+		}
 	}
 
 	public void draw(TerminalCanvas canvas) {
 		this.gameField.relativeLocationX = canvas.width() / 2 - gameField.width() / 2;
 		this.gameField.relativeLocationY = canvas.height() / 2 - gameField.height() / 2;
 
-		this.userInterface.draw(canvas);
+		//this.userInterface.draw(canvas);
 		this.gameField.draw(canvas);
-		this.activeTetromino.draw(canvas);
 		this.activeTetrominoGhost.draw(canvas);
+		this.activeTetromino.draw(canvas);
+
+		this.swapTetromino.parent = this.gameField;
+		this.swapTetromino.setRotation(0);
+		this.swapTetromino.relativeLocationX = -4;
+		this.swapTetromino.relativeLocationY = 5;
+		this.swapTetromino.draw(canvas);
+
+		for (int i = 0; i < this.nextTetrominos.length; i++) {
+			this.nextTetrominos[i].parent = this.gameField;
+			this.nextTetrominos[i].relativeLocationX = this.gameField.width() + 2;
+			this.nextTetrominos[i].relativeLocationY = i * 5 + 5;
+			this.nextTetrominos[i].draw(canvas);
+		}
+
+		canvas.drawString(1, 1, "Score: " + this.score, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
 	}
 
 	public void tick() {
-		this.fallTimer.interval = 250;
+		if (this.gameEnded) {
+			return;
+		}
 
-		if (this.fallTimer.shouldExecute || this.forcePlaced) {
-			if (gameField.canTetrominoBePlaced(activeTetromino.relativeLocationX, activeTetromino.relativeLocationY + 1, activeTetromino)) {
-				activeTetromino.relativeLocationY++;
+		this.fallTimer.interval = 250;
+		if (this.fallTimer.shouldExecute) {
+			if (this.gameField.canTetrominoBePlaced(this.activeTetromino.relativeLocationX, this.activeTetromino.relativeLocationY + 1, this.activeTetromino)) {
+				this.activeTetromino.relativeLocationY++;
 			} else {
-				if (gameField.canTetrominoBePlaced(activeTetromino.relativeLocationX, activeTetromino.relativeLocationY, activeTetromino)) {
-					gameField.addTetromino(activeTetromino.relativeLocationX, activeTetromino.relativeLocationY, activeTetromino);
+				if (this.gameField.canTetrominoBePlaced(this.activeTetromino.relativeLocationX, this.activeTetromino.relativeLocationY, this.activeTetromino)) {
+					this.gameField.addTetromino(this.activeTetromino.relativeLocationX, this.activeTetromino.relativeLocationY, this.activeTetromino);
+					this.tetrominoSwapped = false;
+					this.setActiveTetromino(this.popNexTetromino());
 				}
 			}
 		}
+
+		this.activeTetrominoGhost.setRotation(this.activeTetromino.rotation);
+		this.activeTetrominoGhost.relativeLocationX = this.activeTetromino.relativeLocationX;
+		this.activeTetrominoGhost.relativeLocationY = this.activeTetromino.relativeLocationY;
+
+		while (this.gameField.canTetrominoBePlaced(this.activeTetrominoGhost.relativeLocationX, this.activeTetrominoGhost.relativeLocationY + 1, activeTetrominoGhost)) {
+			this.activeTetrominoGhost.relativeLocationY++;
+		}
+
+		int rowsRemoved = this.gameField.removeFullRows();
+		this.score += rowsRemoved * 40;
 	}
 
 	public void inputTick(TerminalInputHook input) {
+		if (this.gameEnded) {
+			return;
+		}
+
 		if (input.isKeyPressed('w') || input.isKeyPressed('W')) {
 			this.activeTetromino.setRotation((this.activeTetromino.getRotation() + 1) % 4);
 			
@@ -94,18 +134,25 @@ public class Game {
 
 		if ((input.isKeyPressed('s') || input.isKeyPressed('S')) && this.gameField.canTetrominoBePlaced(this.activeTetromino.relativeLocationX, this.activeTetromino.relativeLocationY + 1, this.activeTetromino)) {
 			this.activeTetromino.relativeLocationY++;
+			this.score += 1;
 		}
 
 		if (input.isKeyPressed(' ')) {
 			while (this.gameField.canTetrominoBePlaced(this.activeTetromino.relativeLocationX, this.activeTetromino.relativeLocationY + 1, this.activeTetromino)) {
 				this.activeTetromino.relativeLocationY++;
+				this.score += 1;
 			}
 
-			this.forcePlaced = true;
+			this.gameField.addTetromino(this.activeTetromino.relativeLocationX, this.activeTetromino.relativeLocationY, this.activeTetromino);
+			this.tetrominoSwapped = false;
+			this.setActiveTetromino(this.popNexTetromino());
 		}
 
 		if (input.isKeyPressed('c') && !this.tetrominoSwapped) {
 			this.tetrominoSwapped = true;
+			Tetromino temp = this.swapTetromino;
+			this.swapTetromino = this.activeTetromino;
+			this.setActiveTetromino(temp);
 		}
 	}
 
@@ -121,6 +168,7 @@ public class Game {
 			retries++;
 
 			if (retries > 5) {
+				this.activeTetromino.relativeLocationX =- 10000; // hide it
 				this.gameEnded = true;
 				return;
 			}
@@ -130,5 +178,15 @@ public class Game {
 		for (int i = 0; i < this.activeTetrominoGhost.blocks.length; i++) {
 			activeTetrominoGhost.blocks[i].renderAsGhost = true;
 		}
+	}
+
+	public Tetromino popNexTetromino() {
+		Tetromino out = this.nextTetrominos[0];
+		for (int i = 1; i < this.nextTetrominos.length; i++) {
+			this.nextTetrominos[i - 1] = this.nextTetrominos[i];
+		}
+
+		this.nextTetrominos[this.nextTetrominos.length - 1] = Tetromino.newRandomTetromino(0);
+		return out;
 	}
 }
