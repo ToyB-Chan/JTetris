@@ -108,6 +108,7 @@ public class Game {
 				for (int i = 0; i < 4; i++) {
 					if (this.gameField.canTetrominoBePlaced(this.activeTetromino.relativeLocationX + i, this.activeTetromino.relativeLocationY, this.activeTetromino)) {
 						this.activeTetromino.relativeLocationX += i;
+						SoundPlayer
 						break;
 					}
 

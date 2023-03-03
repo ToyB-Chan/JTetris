@@ -1,7 +1,6 @@
 import java.io.PrintStream;
 
 public class TerminalCanvas {
-
 	private int width;
 	private int height;
 	private TerminalPixel[][] buffer;
