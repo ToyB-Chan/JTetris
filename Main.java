@@ -11,6 +11,10 @@ public class Main {
 		Game game = new Game();
 		boolean pause = false;
 
+		SoundPlayer bgMusic = new SoundPlayer("./resources/songa.wav", true);
+		bgMusic.setVolume(0.5f);
+		bgMusic.play();
+
 		while (true) {
 			game.draw(canvas);
 

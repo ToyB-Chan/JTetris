@@ -1,9 +1,0 @@
-public class SoundPlayer {
-	public static void PlayAudioOnce(String filePath) {
-		File file = new File ("./" + filePath);
-		AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
-		Clip clip = AudioSystem.getClip();
-		clip.open(audioIn);
-		clip.start();
-	}
-}

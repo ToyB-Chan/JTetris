@@ -24,6 +24,7 @@ public class Game {
 	public boolean gameEnded;
 	public int numRowsCleared;
 
+
 	public Game() {
 		this.nextTetrominos = new Tetromino[3];
 		this.gameField = new GameField(10, 20);
@@ -79,6 +80,7 @@ public class Game {
 					this.gameField.addTetromino(this.activeTetromino.relativeLocationX, this.activeTetromino.relativeLocationY, this.activeTetromino);
 					this.tetrominoSwapped = false;
 					this.setActiveTetromino(this.popNexTetromino());
+					SoundPlayer.playOnce("./resources/drop.wav");
 				}
 			}
 		}
@@ -94,6 +96,13 @@ public class Game {
 		int rowsRemoved = this.gameField.removeFullRows();
 		this.score += rowsRemoved * 40;
 		this.numRowsCleared += rowsRemoved;
+
+		if (rowsRemoved > 2) {
+			SoundPlayer.playOnce("./resources/rowclear.wav");
+			SoundPlayer.playOnce("./resources/rowclearbig.wav");
+		} else if (rowsRemoved > 0) {
+			SoundPlayer.playOnce("./resources/rowclear.wav");
+		}
 	}
 
 	public void inputTick(TerminalInputHook input) {
@@ -108,7 +117,6 @@ public class Game {
 				for (int i = 0; i < 4; i++) {
 					if (this.gameField.canTetrominoBePlaced(this.activeTetromino.relativeLocationX + i, this.activeTetromino.relativeLocationY, this.activeTetromino)) {
 						this.activeTetromino.relativeLocationX += i;
-						SoundPlayer
 						break;
 					}
 
@@ -125,22 +133,28 @@ public class Game {
 					// if we are at the end of the loop we were not able to find a valid place, thus we rotate it back.
 					if (i + 1  >= 4) {
 						this.activeTetromino.setRotation((this.activeTetromino.getRotation() - 1) % 4);
+						return;
 					}
 				}
 			}
+
+			SoundPlayer.playOnce("./resources/rotate.wav");
 		}
 
 		if ((input.isKeyPressed('a') || input.isKeyPressed('A')) && this.gameField.canTetrominoBePlaced(this.activeTetromino.relativeLocationX - 1, this.activeTetromino.relativeLocationY, this.activeTetromino)) {
 			this.activeTetromino.relativeLocationX--;
+			SoundPlayer.playOnce("./resources/move.wav");
 		}
 
 		if ((input.isKeyPressed('d') || input.isKeyPressed('D')) && this.gameField.canTetrominoBePlaced(this.activeTetromino.relativeLocationX + 1, this.activeTetromino.relativeLocationY, this.activeTetromino)) {
 			this.activeTetromino.relativeLocationX++;
+			SoundPlayer.playOnce("./resources/move.wav");
 		}
 
 		if ((input.isKeyPressed('s') || input.isKeyPressed('S')) && this.gameField.canTetrominoBePlaced(this.activeTetromino.relativeLocationX, this.activeTetromino.relativeLocationY + 1, this.activeTetromino)) {
 			this.activeTetromino.relativeLocationY++;
 			this.score += 1;
+			SoundPlayer.playOnce("./resources/move.wav");
 		}
 
 		if (input.isKeyPressed(' ')) {
@@ -152,6 +166,7 @@ public class Game {
 			this.gameField.addTetromino(this.activeTetromino.relativeLocationX, this.activeTetromino.relativeLocationY, this.activeTetromino);
 			this.tetrominoSwapped = false;
 			this.setActiveTetromino(this.popNexTetromino());
+			SoundPlayer.playOnce("./resources/drop.wav");
 		}
 
 		if (input.isKeyPressed('c') && !this.tetrominoSwapped) {
@@ -159,6 +174,7 @@ public class Game {
 			Tetromino temp = this.swapTetromino;
 			this.swapTetromino = this.activeTetromino;
 			this.setActiveTetromino(temp);
+			SoundPlayer.playOnce("./resources/swap.wav");
 		}
 	}
 
