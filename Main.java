@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 public class Main {
-	static final int TARGET_FRAME_TIME = 16;
+	public static final int TARGET_FRAME_TIME = 16;
 
 	public static void main(String[] args) throws InterruptedException, IOException, ExecutionException {
 		TerminalCanvas canvas = new TerminalCanvas(53, 29, TerminalColor.BLACK);

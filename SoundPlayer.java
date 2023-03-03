@@ -3,8 +3,8 @@ import javax.sound.sampled.*;
 
 public class SoundPlayer {
 	public static final float GLOBAL_VOLUME = .5f;
-	public boolean valid;
 	public File file;
+	protected boolean valid;
 	protected Clip clip;
 	protected boolean looping;
 
@@ -16,10 +16,7 @@ public class SoundPlayer {
 			clip.open(audioIn);
 			this.valid = true;
 			this.setVolume(GLOBAL_VOLUME);
-
-			if (loop) {
-				clip.loop(-1);
-			}
+			this.setLooping(loop);
 		} catch(Exception e) {
 			this.valid = false;
 		}
@@ -40,7 +37,6 @@ public class SoundPlayer {
 	public void reset() {
 		clip.setFramePosition(0);
 	}
- 
 
 	public void setLooping(boolean val) {
 		this.looping = val;
@@ -64,6 +60,10 @@ public class SoundPlayer {
 	public float getVolume() {
 		FloatControl control = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
 		return (float)Math.pow(10, (control.getValue() / GLOBAL_VOLUME) / 20.f);
+	}
+
+	public boolean valid() {
+		return this.valid;
 	}
 
 	public static SoundPlayer playOnce(String filePath) {
