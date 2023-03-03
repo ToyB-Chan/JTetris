@@ -94,7 +94,7 @@ public class Game {
 		}
 
 		int rowsRemoved = this.gameField.removeFullRows();
-		this.score += rowsRemoved * 40;
+		this.score += rowsRemoved * 100;
 		this.numRowsCleared += rowsRemoved;
 
 		if (rowsRemoved > 2) {
