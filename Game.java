@@ -22,6 +22,7 @@ public class Game {
 	// States
 	public boolean tetrominoSwapped;
 	public boolean gameEnded;
+	public int numRowsCleared;
 
 	public Game() {
 		this.nextTetrominos = new Tetromino[3];
@@ -34,6 +35,8 @@ public class Game {
 		for (int i = 0; i < this.nextTetrominos.length; i++) {
 			this.nextTetrominos[i] = Tetromino.newRandomTetromino(0);
 		}
+
+		this.level = 1;
 	}
 
 	public void draw(TerminalCanvas canvas) {
@@ -59,6 +62,7 @@ public class Game {
 		}
 
 		canvas.drawString(1, 1, "Score: " + this.score, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+		canvas.drawString(1, 2, "Level: " + this.level, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
 	}
 
 	public void tick() {
@@ -89,6 +93,7 @@ public class Game {
 
 		int rowsRemoved = this.gameField.removeFullRows();
 		this.score += rowsRemoved * 40;
+		this.numRowsCleared += rowsRemoved;
 	}
 
 	public void inputTick(TerminalInputHook input) {
