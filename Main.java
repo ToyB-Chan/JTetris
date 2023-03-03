@@ -22,7 +22,6 @@ public class Main {
 				game = new Game();
 			}
 
-
 			if (!game.gameEnded && !pause) {
 				game.tick();
 				game.inputTick(input);
