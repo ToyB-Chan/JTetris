@@ -63,7 +63,7 @@ public class SoundPlayer {
 	}
 
 	public boolean valid() {
-		return this.valid;
+		return this.file.exists() && this.valid;
 	}
 
 	public static SoundPlayer playOnce(String filePath) {
