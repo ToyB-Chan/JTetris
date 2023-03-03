@@ -1,2 +1,2 @@
 @ECHO OFF
-START powershell.exe -NoExit -Command "javac -d ./out/ ./*.java; Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force; ./set-console-mode.ps1; java -cp ./out/ Main | Out-Host"
+START powershell.exe -NoExit -Command "javac -d ./out/ ./src/*.java; Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force; ./set-console-mode.ps1; java -cp ./out/ Main | Out-Host"

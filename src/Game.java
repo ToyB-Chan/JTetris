@@ -80,7 +80,7 @@ public class Game {
 					this.gameField.addTetromino(this.activeTetromino.relativeLocationX, this.activeTetromino.relativeLocationY, this.activeTetromino);
 					this.tetrominoSwapped = false;
 					this.setActiveTetromino(this.popNexTetromino());
-					SoundPlayer.playOnce("./resources/drop.wav");
+					SoundPlayer.playOnce("./res/drop.wav");
 				}
 			}
 		}
@@ -98,10 +98,10 @@ public class Game {
 		this.numRowsCleared += rowsRemoved;
 
 		if (rowsRemoved > 2) {
-			SoundPlayer.playOnce("./resources/rowclear.wav");
-			SoundPlayer.playOnce("./resources/rowclearbig.wav");
+			SoundPlayer.playOnce("./res/rowclear.wav");
+			SoundPlayer.playOnce("./res/rowclearbig.wav");
 		} else if (rowsRemoved > 0) {
-			SoundPlayer.playOnce("./resources/rowclear.wav");
+			SoundPlayer.playOnce("./res/rowclear.wav");
 		}
 	}
 
@@ -138,23 +138,23 @@ public class Game {
 				}
 			}
 
-			SoundPlayer.playOnce("./resources/rotate.wav");
+			SoundPlayer.playOnce("./res/rotate.wav");
 		}
 
 		if ((input.isKeyPressed('a') || input.isKeyPressed('A')) && this.gameField.canTetrominoBePlaced(this.activeTetromino.relativeLocationX - 1, this.activeTetromino.relativeLocationY, this.activeTetromino)) {
 			this.activeTetromino.relativeLocationX--;
-			SoundPlayer.playOnce("./resources/move.wav");
+			SoundPlayer.playOnce("./res/move.wav");
 		}
 
 		if ((input.isKeyPressed('d') || input.isKeyPressed('D')) && this.gameField.canTetrominoBePlaced(this.activeTetromino.relativeLocationX + 1, this.activeTetromino.relativeLocationY, this.activeTetromino)) {
 			this.activeTetromino.relativeLocationX++;
-			SoundPlayer.playOnce("./resources/move.wav");
+			SoundPlayer.playOnce("./res/move.wav");
 		}
 
 		if ((input.isKeyPressed('s') || input.isKeyPressed('S')) && this.gameField.canTetrominoBePlaced(this.activeTetromino.relativeLocationX, this.activeTetromino.relativeLocationY + 1, this.activeTetromino)) {
 			this.activeTetromino.relativeLocationY++;
 			this.score += 1;
-			SoundPlayer.playOnce("./resources/move.wav");
+			SoundPlayer.playOnce("./res/move.wav");
 		}
 
 		if (input.isKeyPressed(' ')) {
@@ -166,7 +166,7 @@ public class Game {
 			this.gameField.addTetromino(this.activeTetromino.relativeLocationX, this.activeTetromino.relativeLocationY, this.activeTetromino);
 			this.tetrominoSwapped = false;
 			this.setActiveTetromino(this.popNexTetromino());
-			SoundPlayer.playOnce("./resources/drop.wav");
+			SoundPlayer.playOnce("./res/drop.wav");
 		}
 
 		if (input.isKeyPressed('c') && !this.tetrominoSwapped) {
@@ -174,7 +174,7 @@ public class Game {
 			Tetromino temp = this.swapTetromino;
 			this.swapTetromino = this.activeTetromino;
 			this.setActiveTetromino(temp);
-			SoundPlayer.playOnce("./resources/swap.wav");
+			SoundPlayer.playOnce("./res/swap.wav");
 		}
 	}
 
