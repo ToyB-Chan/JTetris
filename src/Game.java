@@ -32,7 +32,8 @@ public class Game {
 		this.nextTetrominos = new Tetromino[3];
 		this.gameField = new GameField(10, 20);
 		this.fallTimer = new Timer(this.baseFallInterval);
-		this.userInterface = new UserInterface();
+		this.userInterface = new UserInterface(this.gameField);
+		this.userInterface.parent = this.gameField;
 		
 		this.setActiveTetromino(Tetromino.newRandomTetromino(0));
 		this.swapTetromino = Tetromino.newRandomTetromino(0);
@@ -45,7 +46,7 @@ public class Game {
 		this.gameField.relativeLocationX = canvas.width() / 2 - gameField.width() / 2;
 		this.gameField.relativeLocationY = canvas.height() / 2 - gameField.height() / 2;
 
-		//this.userInterface.draw(canvas);
+		this.userInterface.draw(canvas);
 		this.gameField.draw(canvas);
 		this.activeTetrominoGhost.draw(canvas);
 		this.activeTetromino.draw(canvas);
