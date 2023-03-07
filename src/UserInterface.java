@@ -23,7 +23,10 @@ public class UserInterface extends GameObject {
 			canvas.drawPixel(gameField.getAbsoluteLocationX() + j, gameField.getAbsoluteLocationY() - 1, new TerminalColor((int)(Math.sin(time * speed) * 255), (int)(Math.sin(time * speed + 10 + j) * 255), (int)(Math.sin(time * speed + 50 + j) *200) ));
 			canvas.drawPixel(gameField.getAbsoluteLocationX() + j, gameField.getAbsoluteLocationY() +gameField.height(), new TerminalColor((int)(Math.sin(time * speed) * 255), (int)(Math.sin(time * speed + 10 + j ) * 255), (int)(Math.sin(time * speed + 50 + j) * 200) ));
 		}
-		
+		//for (int k = 0; k < 5; k++){
+		//	canvas.drawPixel(gameField.getAbsoluteLocationX() + 4, gameField.getAbsoluteLocationY() , TerminalColor.ORANGE);
+		//}		
+
 }
 }	
 
