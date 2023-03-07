@@ -28,16 +28,15 @@ public class Game {
 	public Game() {
 		this.nextTetrominos = new Tetromino[3];
 		this.gameField = new GameField(10, 20);
-		this.fallTimer = new Timer(250);
+		this.fallTimer = new Timer(0);
 		this.userInterface = new UserInterface();
+		this.level = 1;
 		
 		this.setActiveTetromino(Tetromino.newRandomTetromino(0));
 		this.swapTetromino = Tetromino.newRandomTetromino(0);
 		for (int i = 0; i < this.nextTetrominos.length; i++) {
 			this.nextTetrominos[i] = Tetromino.newRandomTetromino(0);
 		}
-
-		this.level = 1;
 	}
 
 	public void draw(TerminalCanvas canvas) {
@@ -64,6 +63,8 @@ public class Game {
 
 		canvas.drawString(1, 1, "Score: " + this.score, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
 		canvas.drawString(1, 2, "Level: " + this.level, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+		canvas.drawString(1, 3, "Rows Clear: " + this.numRowsCleared, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+		canvas.drawString(1, 4, "Speed: " + 1.f / (this.fallTimer.interval / 1000.f), TerminalColor.WHITE, TerminalColor.TRANSPARENT);
 	}
 
 	public void tick() {
@@ -71,7 +72,10 @@ public class Game {
 			return;
 		}
 
-		this.fallTimer.interval = 250;
+		
+
+
+
 		if (this.fallTimer.shouldExecute) {
 			if (this.gameField.canTetrominoBePlaced(this.activeTetromino.relativeLocationX, this.activeTetromino.relativeLocationY + 1, this.activeTetromino)) {
 				this.activeTetromino.relativeLocationY++;
@@ -102,6 +106,12 @@ public class Game {
 			SoundPlayer.playOnce("./res/rowclearbig.wav");
 		} else if (rowsRemoved > 0) {
 			SoundPlayer.playOnce("./res/rowclear.wav");
+
+		}
+		
+		if(this.numRowsCleared >= (this.level * 10) || this.numRowsCleared >= 100 ){
+			this.level++;
+			this.fallTimer.interval = 250 - (this.level * 4);
 		}
 	}
 
