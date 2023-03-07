@@ -23,14 +23,16 @@ public class Game {
 	public boolean tetrominoSwapped;
 	public boolean gameEnded;
 	public int numRowsCleared;
+	public int baseFallInterval;
 
 
 	public Game() {
+		this.level = 1;
+		this.baseFallInterval = 250;
 		this.nextTetrominos = new Tetromino[3];
 		this.gameField = new GameField(10, 20);
-		this.fallTimer = new Timer(0);
+		this.fallTimer = new Timer(this.baseFallInterval);
 		this.userInterface = new UserInterface();
-		this.level = 1;
 		
 		this.setActiveTetromino(Tetromino.newRandomTetromino(0));
 		this.swapTetromino = Tetromino.newRandomTetromino(0);
@@ -108,10 +110,10 @@ public class Game {
 			SoundPlayer.playOnce("./res/rowclear.wav");
 
 		}
-		
+
 		if(this.numRowsCleared >= (this.level * 10) || this.numRowsCleared >= 100 ){
 			this.level++;
-			this.fallTimer.interval = 250 - (this.level * 4);
+			this.fallTimer.interval = this.baseFallInterval - (this.level * 4);
 		}
 	}
 
