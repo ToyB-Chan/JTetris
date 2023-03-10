@@ -14,18 +14,27 @@ public class UserInterface extends GameObject {
 	@Override
 	public void draw(TerminalCanvas canvas) {
 		time += Main.TARGET_FRAME_TIME;
-		//canvas.drawArea(9, 10, 1, 20, 'L', TerminalColor.TRANSPARENT, TerminalColor.BLUE);
+		
 		for (int i = 0; i < gameField.height(); i++) {
 			canvas.drawPixel(gameField.getAbsoluteLocationX() - 1, gameField.getAbsoluteLocationY() + i, new TerminalColor((int)(Math.sin(time * speed) * 255), (int)(Math.sin(time * speed + 10 + i) * 255), (int)(Math.sin(time * speed + 50 + i) * 200) ));
 			canvas.drawPixel(gameField.getAbsoluteLocationX() + gameField.width(), gameField.getAbsoluteLocationY() + i, new TerminalColor((int)(Math.sin(time * speed) * 255), (int)(Math.sin(time * speed + 10 + i) * 255), (int)(Math.sin(time * speed + 50 + i) * 200) ));
 		}
+		//gamefield frame y
 		for (int j = -1; j <= gameField.width(); j++) {
 			canvas.drawPixel(gameField.getAbsoluteLocationX() + j, gameField.getAbsoluteLocationY() - 1, new TerminalColor((int)(Math.sin(time * speed) * 255), (int)(Math.sin(time * speed + 10 + j) * 255), (int)(Math.sin(time * speed + 50 + j) *200) ));
 			canvas.drawPixel(gameField.getAbsoluteLocationX() + j, gameField.getAbsoluteLocationY() +gameField.height(), new TerminalColor((int)(Math.sin(time * speed) * 255), (int)(Math.sin(time * speed + 10 + j ) * 255), (int)(Math.sin(time * speed + 50 + j) * 200) ));
 		}
-		//for (int k = 0; k < 5; k++){
-		//	canvas.drawPixel(gameField.getAbsoluteLocationX() + 4, gameField.getAbsoluteLocationY() , TerminalColor.ORANGE);
-		//}		
+		//gamefield frame x
+		for (int k = 2; k < 9; k++) {
+			canvas.drawPixel(gameField.getAbsoluteLocationX() -9, gameField.getAbsoluteLocationY() + k, new TerminalColor((int)(Math.sin(time * speed) * 255), (int)(Math.sin(time * speed + 10 + k) * 255), (int)(Math.sin(time * speed + 50 + k) * 200) ));
+			canvas.drawPixel(gameField.getAbsoluteLocationX()  -3, gameField.getAbsoluteLocationY() + k, new TerminalColor((int)(Math.sin(time * speed) * 255), (int)(Math.sin(time * speed + 10 + k) * 255), (int)(Math.sin(time * speed + 50 + k) * 200) ));
+		}
+		//swap y frame
+		for (int l = -9; l < -2; l++) {
+			canvas.drawPixel(gameField.getAbsoluteLocationX() + l, gameField.getAbsoluteLocationY() +2, new TerminalColor((int)(Math.sin(time * speed) * 255), (int)(Math.sin(time * speed + 10 + l) * 255), (int)(Math.sin(time * speed + 50 + l) *200) ));
+			canvas.drawPixel(gameField.getAbsoluteLocationX() + l, gameField.getAbsoluteLocationY() +8, new TerminalColor((int)(Math.sin(time * speed) * 255), (int)(Math.sin(time * speed + 10 + l ) * 255), (int)(Math.sin(time * speed + 50 + l) * 200) ));
+		}
+		//swap x frame
 
 }
 }	
