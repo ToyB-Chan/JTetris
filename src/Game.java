@@ -53,13 +53,13 @@ public class Game {
 
 		this.swapTetromino.parent = this.gameField;
 		this.swapTetromino.setRotation(0);
-		this.swapTetromino.relativeLocationX = -5;
+		this.swapTetromino.relativeLocationX = -6;
 		this.swapTetromino.relativeLocationY = 5;
 		this.swapTetromino.draw(canvas);
 
 		for (int i = 0; i < this.nextTetrominos.length; i++) {
 			this.nextTetrominos[i].parent = this.gameField;
-			this.nextTetrominos[i].relativeLocationX = this.gameField.width() + 4;
+			this.nextTetrominos[i].relativeLocationX = this.gameField.width() + 5;
 			this.nextTetrominos[i].relativeLocationY = i * 5 + 5;
 			this.nextTetrominos[i].draw(canvas);
 		}
