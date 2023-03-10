@@ -63,11 +63,13 @@ public class Game {
 			this.nextTetrominos[i].relativeLocationY = i * 5 + 5;
 			this.nextTetrominos[i].draw(canvas);
 		}
+		
+		canvas.drawString(gameField.getAbsoluteLocationX()+2, 1, "JTETRIS" , TerminalColor.WHITE, TerminalColor.TRANSPARENT);
 
-		canvas.drawString(1, 1, "Score: " + this.score, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
-		canvas.drawString(1, 2, "Level: " + this.level, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
-		canvas.drawString(1, 3, "Rows Clear: " + this.numRowsCleared, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
-		canvas.drawString(1, 4, "Speed: " + 1.f / (this.fallTimer.interval / 1000.f), TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+		canvas.drawString(9, 20, "Score: " + this.score, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+		canvas.drawString(9, 21, "Level: " + this.level, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+		canvas.drawString(9, 22, "Rows : " + this.numRowsCleared, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+		//canvas.drawString(1, 18, "Speed: " + 1.f / (this.fallTimer.interval / 1000.f), TerminalColor.WHITE, TerminalColor.TRANSPARENT);
 	}
 
 	public void tick() {
