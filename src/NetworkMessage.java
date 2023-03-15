@@ -1,5 +1,5 @@
 public class NetworkMessage {
-	public int type;
+	private int type;
 	private String content;
 
 	public NetworkMessage(int type) {
@@ -12,21 +12,35 @@ public class NetworkMessage {
 		this.content = content;
 	}
 
+	public NetworkMessage(int type, int content) {
+		this.type = type;
+		this.content = Integer.toString(content);
+	}
+
+	public NetworkMessage(int type, float content) {
+		this.type = type;
+		this.content = Float.toString(content);
+	}
+
 	public NetworkMessage(String transmitString) {
 		String[] arr = transmitString.split(":::");
 		this.type = Integer.parseInt(arr[0]);
 		this.content = arr[1];
 	}
 
-	public String getContentString() {
+	public int type() {
+		return this.type;
+	}
+
+	public String contentString() {
 		return this.content;
 	}
 
-	public int getContentInt() {
+	public int contentInt() {
 		return Integer.parseInt(this.content);
 	}
 
-	public float getContentFloat() {
+	public float contentFloat() {
 		return Float.parseFloat(this.content);
 	}
 

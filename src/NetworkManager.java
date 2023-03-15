@@ -8,9 +8,9 @@ import java.util.List;
 
 public class NetworkManager {
     private Socket socket;
-    private ServerSocket serverSocket;
     private DataInputStream socketInStream;
     private DataOutputStream socketOutStream;
+    private ServerSocket serverSocket;
     private List<NetworkMessage> receivedMessages;
     private int numOpenMessages;
 
@@ -35,7 +35,7 @@ public class NetworkManager {
         while (this.socketInStream.available() > 0) {
             NetworkMessage msg = new NetworkMessage(this.socketInStream.readUTF());
 
-            if (msg.type == NetworkMessage.MESSAGE_RECEIVED) {
+            if (msg.type() == NetworkMessage.MESSAGE_RECEIVED) {
                 this.numOpenMessages--;
                 continue;
             }
