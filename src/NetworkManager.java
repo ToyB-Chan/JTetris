@@ -27,6 +27,7 @@ public class NetworkManager {
     }
 
     public void connect(String hostname, int port) throws IOException {
+        this.socket = new Socket(hostname, port);
         this.socketInStream = new DataInputStream(this.socket.getInputStream());
         this.socketOutStream = new DataOutputStream(this.socket.getOutputStream());
     }
