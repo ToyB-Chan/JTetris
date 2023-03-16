@@ -10,23 +10,24 @@ public class Main {
 		input.startHook(System.in);
 
 		boolean multiplayer = false;
-		boolean host = false;
+		boolean host = true;
+		String username = "User";
 		NetworkManager netManager = new NetworkManager();
 
 		if (multiplayer && host) {
 			netManager.host(5611);
+			username = "Host";
 		} else if (multiplayer) {
 			netManager.connect("127.0.0.1", 5611);
+			username = "Client";
 		}
 
-		Game game = new Game(netManager);
+		Game game = new Game(username, netManager);
 		boolean pause = false;
 
 		SoundPlayer bgMusic = new SoundPlayer("./res/songa.wav", true);
 		bgMusic.setVolume(0.5f);
 		bgMusic.play();
-
-
 
 		while (true) {
 			game.draw(canvas);
@@ -37,7 +38,7 @@ public class Main {
 
 			if ((input.isKeyPressed('r') || input.isKeyPressed('R')) && game.gameEnded) {
 				if (!multiplayer || multiplayer && host) {
-					game = new Game(netManager);
+					game = new Game(username, netManager);
 					NetworkMessage msg = new NetworkMessage(NetworkMessage.GAME_BEGIN);
 					netManager.send(msg);
 				}
@@ -69,7 +70,7 @@ public class Main {
 						NetworkMessage msg = netManager.nextMessage();
 
 						if (msg.type() == NetworkMessage.GAME_BEGIN) {
-							game = new Game(netManager);
+							game = new Game(username, netManager);
 						}
 					}
 				}

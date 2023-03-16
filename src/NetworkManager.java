@@ -28,6 +28,7 @@ public class NetworkManager {
 		this.socket = this.serverSocket.accept();
 		this.socketInStream = new DataInputStream(this.socket.getInputStream());
 		this.socketOutStream = new DataOutputStream(this.socket.getOutputStream());
+		this.socket.setSoTimeout(10000);
 	}
 
 	public void connect(String hostname, int port) throws IOException {
@@ -38,6 +39,7 @@ public class NetworkManager {
 		this.socket = new Socket(hostname, port);
 		this.socketInStream = new DataInputStream(this.socket.getInputStream());
 		this.socketOutStream = new DataOutputStream(this.socket.getOutputStream());
+		this.socket.setSoTimeout(10000);
 	}
 
 	public void update() throws IOException {

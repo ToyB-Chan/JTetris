@@ -4,8 +4,8 @@ public class PlayerStats {
 	public int level;
 	public int rowsRemoved;
 
-	public PlayerStats(String username) {
-		this.username = username;
+	public PlayerStats() {
+		this.username = "Unknown";
 		this.score = 0;
 		this.level = 1;
 		this.rowsRemoved = 0;

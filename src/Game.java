@@ -13,6 +13,7 @@ public class Game {
 
 	// Timers
 	public Timer fallTimer;
+	public Timer transmitStatsTimer;
 
 	// Player stats
 	public PlayerStats localStats;
@@ -31,13 +32,15 @@ public class Game {
 
 
 
-	public Game(NetworkManager netManager) throws IOException {
+	public Game(String username, NetworkManager netManager) throws IOException {
 		this.baseFallInterval = 250;
 		this.nextTetrominos = new Tetromino[3];
 		this.gameField = new GameField(10, 20);
 		this.fallTimer = new Timer(this.baseFallInterval);
-		this.localStats = new PlayerStats("Owner");
-		this.remoteStats = new PlayerStats("Other");
+		this.transmitStatsTimer = new Timer(750);
+		this.localStats = new PlayerStats();
+		this.localStats.username = username;
+		this.remoteStats = new PlayerStats();
 		this.userInterface = new UserInterface(this.gameField);
 		this.userInterface.parent = this.gameField;
 		this.netManager = netManager;
@@ -73,10 +76,17 @@ public class Game {
 		
 		canvas.drawString(gameField.getAbsoluteLocationX()+2, 1, "JTETRIS" , TerminalColor.WHITE, TerminalColor.TRANSPARENT);
 
-		canvas.drawString(9, 20, "Score: " + this.localStats.score, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
-		canvas.drawString(9, 21, "Level: " + this.localStats.level, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
-		canvas.drawString(9, 22, "Rows : " + this.localStats.rowsRemoved, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
-		//canvas.drawString(1, 18, "Speed: " + 1.f / (this.fallTimer.interval / 1000.f), TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+		canvas.drawString(7, 15, this.localStats.username + ":", TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+		canvas.drawString(7, 16, "- Score: " + this.localStats.score, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+		canvas.drawString(7, 17, "- Level: " + this.localStats.level, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+		canvas.drawString(7, 18, "- Rows : " + this.localStats.rowsRemoved, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+
+		if (netManager.active()) {
+			canvas.drawString(7, 20, this.remoteStats.username + ":", TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+			canvas.drawString(7, 21, "- Score: " + this.remoteStats.score, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+			canvas.drawString(7, 22, "- Level: " + this.remoteStats.level, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+			canvas.drawString(7, 23, "- Rows : " + this.remoteStats.rowsRemoved, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+		}
 	}
 
 	public void tick() throws IOException {
@@ -95,6 +105,17 @@ public class Game {
 					SoundPlayer.playOnce("./res/drop.wav");
 				}
 			}
+		}
+
+		if (this.transmitStatsTimer.shouldExecute) {
+			NetworkMessage usernameMsg = new NetworkMessage(NetworkMessage.USERNAME, this.localStats.username);
+			NetworkMessage scoreMsg = new NetworkMessage(NetworkMessage.STAT_SCORE, this.localStats.score);
+			NetworkMessage levelMsg = new NetworkMessage(NetworkMessage.STAT_LEVEL, this.localStats.level);
+			NetworkMessage rowsMsg = new NetworkMessage(NetworkMessage.STAT_ROWS_REMOVED, this.localStats.rowsRemoved);
+			this.netManager.send(usernameMsg);
+			this.netManager.send(scoreMsg);
+			this.netManager.send(levelMsg);
+			this.netManager.send(rowsMsg);
 		}
 
 		this.activeTetrominoGhost.setRotation(this.activeTetromino.rotation);
