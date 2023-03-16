@@ -13,12 +13,10 @@ public class NetworkManager {
 	private ServerSocket serverSocket;
 	private List<NetworkMessage> receivedMessages;
 	private int numOpenMessages;
-	private boolean activeConnection;
 
 	public NetworkManager() {
 		this.receivedMessages = new ArrayList<NetworkMessage>();
 		this.numOpenMessages = 0;
-		this.activeConnection = false;
 	}
 
 	public void host(int port) throws IOException {
@@ -40,7 +38,6 @@ public class NetworkManager {
 		this.socket = new Socket(hostname, port);
 		this.socketInStream = new DataInputStream(this.socket.getInputStream());
 		this.socketOutStream = new DataOutputStream(this.socket.getOutputStream());
-		this.activeConnection = true;
 	}
 
 	public void update() throws IOException {
@@ -57,7 +54,7 @@ public class NetworkManager {
 			}
 
 			if (msg.type() == NetworkMessage.CLOSE_CONNECTION) {
-				this.closeIntenal();
+				this.closeInternal();
 			}
 
 			receivedMessages.add(msg);
@@ -103,11 +100,10 @@ public class NetworkManager {
 	public void close() throws IOException {
 		NetworkMessage msg = new NetworkMessage(NetworkMessage.CLOSE_CONNECTION);
 		this.send(msg);
-		this.closeIntenal();
+		this.closeInternal();
 	}
 
-	private void closeIntenal() throws IOException {
-		this.activeConnection = false;
+	private void closeInternal() throws IOException {
 		this.numOpenMessages = 0;
 		this.socketInStream.close();
 		this.socketOutStream.close();
