@@ -22,7 +22,7 @@ public class NetworkManager {
 	}
 
 	public void host(int port) throws IOException {
-		if (this.activeConnection) {
+		if (this.active()) {
 			this.close();
 		}
 
@@ -30,11 +30,10 @@ public class NetworkManager {
 		this.socket = this.serverSocket.accept();
 		this.socketInStream = new DataInputStream(this.socket.getInputStream());
 		this.socketOutStream = new DataOutputStream(this.socket.getOutputStream());
-		this.activeConnection = true;
 	}
 
 	public void connect(String hostname, int port) throws IOException {
-		if (this.activeConnection) {
+		if (this.active()) {
 			this.close();
 		}
 
@@ -45,7 +44,7 @@ public class NetworkManager {
 	}
 
 	public void update() throws IOException {
-		if (!this.activeConnection) {
+		if (!this.active()) {
 			return;
 		}
 
@@ -64,10 +63,14 @@ public class NetworkManager {
 			receivedMessages.add(msg);
 			this.send(new NetworkMessage(NetworkMessage.MESSAGE_RECEIVED));
 		}
+
+		if (this.numOpenMessages > 300) {
+			this.close();
+		}
 	}
 
 	public void send(NetworkMessage msg) throws IOException {
-		if (!this.activeConnection) {
+		if (!this.active()) {
 			return;
 		}
 
@@ -94,7 +97,7 @@ public class NetworkManager {
 	}
 
 	public boolean active() {
-		return this.activeConnection;
+		return this.socket != null && !this.socket.isClosed();
 	}
 
 	public void close() throws IOException {
