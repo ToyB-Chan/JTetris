@@ -153,6 +153,22 @@ public class Game {
 						gameField.addBlockingRow();
 					}
 
+					// Move current tetromino up if we hit it while adding rows
+					int retries = 0;
+					while(!this.gameField.canTetrominoBePlaced(this.activeTetromino.relativeLocationX, this.activeTetromino.relativeLocationY, activeTetromino)) {
+						this.activeTetromino.relativeLocationY--;
+						retries++;
+
+						if (retries > 10) {
+							this.activeTetromino.relativeLocationX =- 10000; // hide it
+							this.gameEnded = true;
+							NetworkMessage endmsg = new NetworkMessage(NetworkMessage.GAME_END);
+							this.netManager.send(endmsg);
+							
+							return;
+						}
+					}
+
 					break;
 				default:
 					break;
@@ -244,7 +260,7 @@ public class Game {
 			this.activeTetromino.relativeLocationY++;
 			retries++;
 
-			if (retries > 5) {
+			if (retries > 10) {
 				this.activeTetromino.relativeLocationX =- 10000; // hide it
 				this.gameEnded = true;
 				NetworkMessage msg = new NetworkMessage(NetworkMessage.GAME_END);

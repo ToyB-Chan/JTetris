@@ -9,7 +9,7 @@ public class Main {
 		TerminalInputHook input = new TerminalInputHook();
 		input.startHook(System.in);
 
-		boolean multiplayer = true;
+		boolean multiplayer = false;
 		boolean host = false;
 		NetworkManager netManager = new NetworkManager();
 
@@ -51,7 +51,7 @@ public class Main {
 				String textHint = " PRESS 'P' TO CONTINUE! ";
 				canvas.drawString(canvas.width() / 2 - textHeader.length() / 2, canvas.height() / 2, textHeader, TerminalColor.RED, TerminalColor.BLACK);
 				canvas.drawString(canvas.width() / 2 - textHint.length() / 2, canvas.height() / 2 + 1, textHint, TerminalColor.LIGHT_GRAY, TerminalColor.BLACK);
-			} else {
+			} else if (game.gameEnded) {
 				String textHeader = " GAME END! ";
 				String textScore = " FINAL SCORE: " + game.localStats.score + " ";
 				String textLevel = " FINAL LEVEL: " + game.localStats.level + " ";

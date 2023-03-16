@@ -56,13 +56,18 @@ public class GameField extends GameObject {
 
 		for(int iy = 0; iy < this.height; iy++) {
 			boolean isRowFull = true;
+			boolean isBlockerRow = false;
 
 			for (int ix = 0; ix < this.width; ix++) {
-				isRowFull = isRowFull && this.grid[ix][iy] != null && !this.grid[ix][iy].isBlocker;
+				isRowFull = isRowFull && this.grid[ix][iy] != null;
+				isBlockerRow = isBlockerRow || (this.grid[ix][iy] != null && this.grid[ix][iy].isBlocker);
 			}
 
 			if (isRowFull) {
-				rowsRemoved++;
+
+				if (!isBlockerRow) {
+					rowsRemoved++;
+				}
 
 				for(int fx = 0; fx < this.width; fx++){
 					this.grid[fx][iy] = null;
