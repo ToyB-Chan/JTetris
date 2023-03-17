@@ -41,7 +41,7 @@ public class SoundPlayer {
 	public void setLooping(boolean val) {
 		this.looping = val;
 		
-		if (this.looping) {
+		if (this.looping) {		
 			clip.loop(-1);
 		} else {
 			clip.loop(0);
@@ -61,6 +61,7 @@ public class SoundPlayer {
 		FloatControl control = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
 		return (float)Math.pow(10, (control.getValue() / GLOBAL_VOLUME) / 20.f);
 	}
+
 
 	public boolean valid() {
 		return this.file.exists() && this.valid;
