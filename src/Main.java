@@ -9,16 +9,16 @@ public class Main {
 		TerminalInputHook input = new TerminalInputHook();
 		input.startHook(System.in);
 
-		boolean multiplayer = false;
+		boolean multiplayer = true;
 		boolean host = true;
 		String username = "User";
 		NetworkManager netManager = new NetworkManager();
 
 		if (multiplayer && host) {
-			netManager.host(5611);
+			while (!netManager.host(56110));
 			username = "Host";
 		} else if (multiplayer) {
-			netManager.connect("127.0.0.1", 5611);
+			while (!netManager.connect("127.0.0.1", 56110));
 			username = "Client";
 		}
 
@@ -40,7 +40,7 @@ public class Main {
 				if (!multiplayer || multiplayer && host) {
 					game = new Game(username, netManager);
 					NetworkMessage msg = new NetworkMessage(NetworkMessage.GAME_BEGIN);
-					netManager.send(msg);
+					netManager.sendReliable(msg);
 				}
 			}
 

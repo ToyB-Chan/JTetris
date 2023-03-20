@@ -30,14 +30,12 @@ public class Game {
 	public boolean gameEnded;
 	public int baseFallInterval;
 
-
-
 	public Game(String username, NetworkManager netManager) throws IOException {
 		this.baseFallInterval = 250;
 		this.nextTetrominos = new Tetromino[3];
 		this.gameField = new GameField(10, 20);
 		this.fallTimer = new Timer(this.baseFallInterval);
-		this.transmitStatsTimer = new Timer(750);
+		this.transmitStatsTimer = new Timer(250);
 		this.localStats = new PlayerStats();
 		this.localStats.username = username;
 		this.remoteStats = new PlayerStats();
@@ -86,6 +84,7 @@ public class Game {
 			canvas.drawString(7, 21, "- Score: " + this.remoteStats.score, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
 			canvas.drawString(7, 22, "- Level: " + this.remoteStats.level, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
 			canvas.drawString(7, 23, "- Rows : " + this.remoteStats.rowsRemoved, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+			canvas.drawString(7, 25, "Num unconfirmed messages: " + this.netManager.numUnconfirmedMessages(), TerminalColor.WHITE, TerminalColor.TRANSPARENT);
 		}
 	}
 
@@ -112,10 +111,10 @@ public class Game {
 			NetworkMessage scoreMsg = new NetworkMessage(NetworkMessage.STAT_SCORE, this.localStats.score);
 			NetworkMessage levelMsg = new NetworkMessage(NetworkMessage.STAT_LEVEL, this.localStats.level);
 			NetworkMessage rowsMsg = new NetworkMessage(NetworkMessage.STAT_ROWS_REMOVED, this.localStats.rowsRemoved);
-			this.netManager.send(usernameMsg);
-			this.netManager.send(scoreMsg);
-			this.netManager.send(levelMsg);
-			this.netManager.send(rowsMsg);
+			this.netManager.sendUnreliable(usernameMsg);
+			this.netManager.sendUnreliable(scoreMsg);
+			this.netManager.sendUnreliable(levelMsg);
+			this.netManager.sendUnreliable(rowsMsg);
 		}
 
 		this.activeTetrominoGhost.setRotation(this.activeTetromino.rotation);
@@ -126,19 +125,21 @@ public class Game {
 			this.activeTetrominoGhost.relativeLocationY++;
 		}
 
-		int rowsRemoved = this.gameField.removeFullRows();
-		this.localStats.score += rowsRemoved * 100;
-		this.localStats.rowsRemoved += rowsRemoved;
-		
-		{
-			NetworkMessage msg = new NetworkMessage(NetworkMessage.ADD_BLOCKING_ROWS, rowsRemoved);
-			this.netManager.send(msg);
+		int fullRowsRemoved = this.gameField.removeFullRows();
+		int blockingRowsRemoved = this.gameField.removeBlockingRows();
+		int sumRowsRemoved = fullRowsRemoved + blockingRowsRemoved;
+		this.localStats.score += sumRowsRemoved * 100;
+		this.localStats.rowsRemoved += sumRowsRemoved;
+
+		if (fullRowsRemoved > 0) {
+			NetworkMessage addRowsMsg = new NetworkMessage(NetworkMessage.ADD_BLOCKING_ROWS, fullRowsRemoved);
+			this.netManager.sendReliable(addRowsMsg);
 		}
 
-		if (rowsRemoved > 2) {
+		if (sumRowsRemoved > 2) {
 			SoundPlayer.playOnce("./res/rowclear.wav");
 			SoundPlayer.playOnce("./res/rowclearbig.wav");
-		} else if (rowsRemoved > 0) {
+		} else if (sumRowsRemoved > 0) {
 			SoundPlayer.playOnce("./res/rowclear.wav");
 
 		}
@@ -183,8 +184,8 @@ public class Game {
 						if (retries > 10) {
 							this.activeTetromino.relativeLocationX =- 10000; // hide it
 							this.gameEnded = true;
-							NetworkMessage endmsg = new NetworkMessage(NetworkMessage.GAME_END);
-							this.netManager.send(endmsg);
+							NetworkMessage endMsg = new NetworkMessage(NetworkMessage.GAME_END);
+							this.netManager.sendReliable(endMsg);
 							
 							return;
 						}
@@ -284,8 +285,8 @@ public class Game {
 			if (retries > 10) {
 				this.activeTetromino.relativeLocationX =- 10000; // hide it
 				this.gameEnded = true;
-				NetworkMessage msg = new NetworkMessage(NetworkMessage.GAME_END);
-				this.netManager.send(msg);
+				NetworkMessage endMsg = new NetworkMessage(NetworkMessage.GAME_END);
+				this.netManager.sendReliable(endMsg);
 				
 				return;
 			}

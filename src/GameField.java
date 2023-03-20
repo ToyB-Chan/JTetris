@@ -56,19 +56,15 @@ public class GameField extends GameObject {
 
 		for(int iy = 0; iy < this.height; iy++) {
 			boolean isRowFull = true;
-			boolean isBlockerRow = false;
+			boolean isBlockingRow = false;
 
 			for (int ix = 0; ix < this.width; ix++) {
 				isRowFull = isRowFull && this.grid[ix][iy] != null;
-				isBlockerRow = isBlockerRow || (this.grid[ix][iy] != null && this.grid[ix][iy].isBlocker);
+				isBlockingRow = isBlockingRow || (this.grid[ix][iy] != null && this.grid[ix][iy].isBlocker);
 			}
 
-			if (isRowFull) {
-
-				if (!isBlockerRow) {
-					rowsRemoved++;
-				}
-
+			if (isRowFull && !isBlockingRow) {
+				rowsRemoved++;
 				for(int fx = 0; fx < this.width; fx++){
 					this.grid[fx][iy] = null;
 				}
@@ -81,7 +77,39 @@ public class GameField extends GameObject {
 							this.grid[fx][py].relativeLocationY++;
 						}
 					}
+				}	
+			}
+		}
 
+		return rowsRemoved;
+	}
+
+	public int removeBlockingRows(){
+		int rowsRemoved = 0;
+
+		for(int iy = 0; iy < this.height; iy++) {
+			boolean isRowFull = true;
+			boolean isBlockingRow = false;
+
+			for (int ix = 0; ix < this.width; ix++) {
+				isRowFull = isRowFull && this.grid[ix][iy] != null;
+				isBlockingRow = isBlockingRow || (this.grid[ix][iy] != null && this.grid[ix][iy].isBlocker);
+			}
+
+			if (isRowFull && isBlockingRow) {
+				rowsRemoved++;
+				for(int fx = 0; fx < this.width; fx++){
+					this.grid[fx][iy] = null;
+				}
+
+				for(int py = iy ; py > 0 ; py--){
+					for (int fx = 0 ; fx < this.width; fx++){
+						this.grid[fx][py] = this.grid[fx][py-1];
+
+						if (this.grid[fx][py] != null) {
+							this.grid[fx][py].relativeLocationY++;
+						}
+					}
 				}	
 			}
 		}
