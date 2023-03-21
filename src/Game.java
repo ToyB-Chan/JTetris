@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 public class Game {
 
 	// Tetrominos
@@ -11,29 +13,35 @@ public class Game {
 
 	// Timers
 	public Timer fallTimer;
+	public Timer transmitStatsTimer;
+
+	// Player stats
+	public PlayerStats localStats;
+	public PlayerStats remoteStats;
 
 	// User interface
 	public UserInterface userInterface;
 
-	// Scores
-	public int score;
-	public int level;
+	// Network manager
+	NetworkManager netManager;
 
 	// States
 	public boolean tetrominoSwapped;
 	public boolean gameEnded;
-	public int numRowsCleared;
 	public int baseFallInterval;
 
-
-	public Game() {
-		this.level = 1;
+	public Game(String username, NetworkManager netManager) throws IOException {
 		this.baseFallInterval = 250;
 		this.nextTetrominos = new Tetromino[3];
 		this.gameField = new GameField(10, 20);
 		this.fallTimer = new Timer(this.baseFallInterval);
+		this.transmitStatsTimer = new Timer(250);
+		this.localStats = new PlayerStats();
+		this.localStats.username = username;
+		this.remoteStats = new PlayerStats();
 		this.userInterface = new UserInterface(this.gameField);
 		this.userInterface.parent = this.gameField;
+		this.netManager = netManager;
 		
 		this.setActiveTetromino(Tetromino.newRandomTetromino(0));
 		this.swapTetromino = Tetromino.newRandomTetromino(0);
@@ -53,31 +61,37 @@ public class Game {
 
 		this.swapTetromino.parent = this.gameField;
 		this.swapTetromino.setRotation(0);
-		this.swapTetromino.relativeLocationX = -5;
+		this.swapTetromino.relativeLocationX = -6;
 		this.swapTetromino.relativeLocationY = 5;
 		this.swapTetromino.draw(canvas);
 
 		for (int i = 0; i < this.nextTetrominos.length; i++) {
 			this.nextTetrominos[i].parent = this.gameField;
-			this.nextTetrominos[i].relativeLocationX = this.gameField.width() + 4;
+			this.nextTetrominos[i].relativeLocationX = this.gameField.width() + 5;
 			this.nextTetrominos[i].relativeLocationY = i * 5 + 5;
 			this.nextTetrominos[i].draw(canvas);
 		}
+		
+		canvas.drawString(gameField.getAbsoluteLocationX()+2, 1, "JTETRIS" , TerminalColor.WHITE, TerminalColor.TRANSPARENT);
 
-		canvas.drawString(1, 1, "Score: " + this.score, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
-		canvas.drawString(1, 2, "Level: " + this.level, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
-		canvas.drawString(1, 3, "Rows Clear: " + this.numRowsCleared, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
-		canvas.drawString(1, 4, "Speed: " + 1.f / (this.fallTimer.interval / 1000.f), TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+		canvas.drawString(7, 15, this.localStats.username + ":", TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+		canvas.drawString(7, 16, "- Score: " + this.localStats.score, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+		canvas.drawString(7, 17, "- Level: " + this.localStats.level, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+		canvas.drawString(7, 18, "- Rows : " + this.localStats.rowsRemoved, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+
+		if (netManager.active()) {
+			canvas.drawString(7, 20, this.remoteStats.username + ":", TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+			canvas.drawString(7, 21, "- Score: " + this.remoteStats.score, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+			canvas.drawString(7, 22, "- Level: " + this.remoteStats.level, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+			canvas.drawString(7, 23, "- Rows : " + this.remoteStats.rowsRemoved, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+			canvas.drawString(7, 25, "Num unconfirmed messages: " + this.netManager.numUnconfirmedMessages(), TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+		}
 	}
 
-	public void tick() {
+	public void tick() throws IOException {
 		if (this.gameEnded) {
 			return;
 		}
-
-		
-
-
 
 		if (this.fallTimer.shouldExecute) {
 			if (this.gameField.canTetrominoBePlaced(this.activeTetromino.relativeLocationX, this.activeTetromino.relativeLocationY + 1, this.activeTetromino)) {
@@ -92,6 +106,17 @@ public class Game {
 			}
 		}
 
+		if (this.transmitStatsTimer.shouldExecute) {
+			NetworkMessage usernameMsg = new NetworkMessage(NetworkMessage.USERNAME, this.localStats.username);
+			NetworkMessage scoreMsg = new NetworkMessage(NetworkMessage.STAT_SCORE, this.localStats.score);
+			NetworkMessage levelMsg = new NetworkMessage(NetworkMessage.STAT_LEVEL, this.localStats.level);
+			NetworkMessage rowsMsg = new NetworkMessage(NetworkMessage.STAT_ROWS_REMOVED, this.localStats.rowsRemoved);
+			this.netManager.sendUnreliable(usernameMsg);
+			this.netManager.sendUnreliable(scoreMsg);
+			this.netManager.sendUnreliable(levelMsg);
+			this.netManager.sendUnreliable(rowsMsg);
+		}
+
 		this.activeTetrominoGhost.setRotation(this.activeTetromino.rotation);
 		this.activeTetrominoGhost.relativeLocationX = this.activeTetromino.relativeLocationX;
 		this.activeTetrominoGhost.relativeLocationY = this.activeTetromino.relativeLocationY;
@@ -100,25 +125,80 @@ public class Game {
 			this.activeTetrominoGhost.relativeLocationY++;
 		}
 
-		int rowsRemoved = this.gameField.removeFullRows();
-		this.score += rowsRemoved * 100;
-		this.numRowsCleared += rowsRemoved;
+		int fullRowsRemoved = this.gameField.removeFullRows();
+		int blockingRowsRemoved = this.gameField.removeBlockingRows();
+		int sumRowsRemoved = fullRowsRemoved + blockingRowsRemoved;
+		this.localStats.score += sumRowsRemoved * 100;
+		this.localStats.rowsRemoved += sumRowsRemoved;
 
-		if (rowsRemoved > 2) {
+		if (fullRowsRemoved > 0) {
+			NetworkMessage addRowsMsg = new NetworkMessage(NetworkMessage.ADD_BLOCKING_ROWS, fullRowsRemoved);
+			this.netManager.sendReliable(addRowsMsg);
+		}
+
+		if (sumRowsRemoved > 2) {
 			SoundPlayer.playOnce("./res/rowclear.wav");
 			SoundPlayer.playOnce("./res/rowclearbig.wav");
-		} else if (rowsRemoved > 0) {
+		} else if (sumRowsRemoved > 0) {
 			SoundPlayer.playOnce("./res/rowclear.wav");
 
 		}
 
-		if(this.numRowsCleared >= (this.level * 10) || this.numRowsCleared >= 100 ){
-			this.level++;
-			this.fallTimer.interval = this.baseFallInterval - (this.level * 4);
+		if(this.localStats.rowsRemoved >= (this.localStats.level * 10) || this.localStats.rowsRemoved >= 100 ){
+			this.localStats.level++;
+			this.fallTimer.interval = this.baseFallInterval - (this.localStats.level * 4);
+		}
+
+		this.netManager.update();
+
+		while (this.netManager.available() > 0) {
+			NetworkMessage msg = this.netManager.nextMessage();
+
+			switch (msg.type()) {
+				case NetworkMessage.USERNAME:
+					this.remoteStats.username = msg.contentString();
+					break;
+				case NetworkMessage.GAME_END:
+					this.gameEnded = true;
+					break;
+				case NetworkMessage.STAT_SCORE:
+					this.remoteStats.score = msg.contentInt();
+					break;
+				case NetworkMessage.STAT_LEVEL:
+					this.remoteStats.level = msg.contentInt();
+					break;
+				case NetworkMessage.STAT_ROWS_REMOVED:
+					this.remoteStats.rowsRemoved = msg.contentInt();
+					break;
+				case NetworkMessage.ADD_BLOCKING_ROWS:
+					for (int i = 0; i < msg.contentInt(); i++) {
+						gameField.addBlockingRow();
+					}
+
+					// Move current tetromino up if we hit it while adding rows
+					int retries = 0;
+					while(!this.gameField.canTetrominoBePlaced(this.activeTetromino.relativeLocationX, this.activeTetromino.relativeLocationY, activeTetromino)) {
+						this.activeTetromino.relativeLocationY--;
+						retries++;
+
+						if (retries > 10) {
+							this.activeTetromino.relativeLocationX =- 10000; // hide it
+							this.gameEnded = true;
+							NetworkMessage endMsg = new NetworkMessage(NetworkMessage.GAME_END);
+							this.netManager.sendReliable(endMsg);
+							
+							return;
+						}
+					}
+
+					break;
+				default:
+					break;
+			}
 		}
 	}
 
-	public void inputTick(TerminalInputHook input) {
+	public void inputTick(TerminalInputHook input) throws IOException {
 		if (this.gameEnded) {
 			return;
 		}
@@ -166,14 +246,14 @@ public class Game {
 
 		if ((input.isKeyPressed('s') || input.isKeyPressed('S')) && this.gameField.canTetrominoBePlaced(this.activeTetromino.relativeLocationX, this.activeTetromino.relativeLocationY + 1, this.activeTetromino)) {
 			this.activeTetromino.relativeLocationY++;
-			this.score += 1;
+			this.localStats.score += 1;
 			SoundPlayer.playOnce("./res/move.wav");
 		}
 
 		if (input.isKeyPressed(' ')) {
 			while (this.gameField.canTetrominoBePlaced(this.activeTetromino.relativeLocationX, this.activeTetromino.relativeLocationY + 1, this.activeTetromino)) {
 				this.activeTetromino.relativeLocationY++;
-				this.score += 1;
+				this.localStats.score += 1;
 			}
 
 			this.gameField.addTetromino(this.activeTetromino.relativeLocationX, this.activeTetromino.relativeLocationY, this.activeTetromino);
@@ -191,7 +271,7 @@ public class Game {
 		}
 	}
 
-	public void setActiveTetromino(Tetromino tetromino) {
+	public void setActiveTetromino(Tetromino tetromino) throws IOException {
 		this.activeTetromino = tetromino;
 		this.activeTetromino.parent = this.gameField;
 		this.activeTetromino.relativeLocationX = this.gameField.width() / 2;
@@ -202,9 +282,12 @@ public class Game {
 			this.activeTetromino.relativeLocationY++;
 			retries++;
 
-			if (retries > 5) {
+			if (retries > 10) {
 				this.activeTetromino.relativeLocationX =- 10000; // hide it
 				this.gameEnded = true;
+				NetworkMessage endMsg = new NetworkMessage(NetworkMessage.GAME_END);
+				this.netManager.sendReliable(endMsg);
+				
 				return;
 			}
 		}

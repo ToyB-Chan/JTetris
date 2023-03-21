@@ -2,6 +2,7 @@ public class TetrominoBlock extends GameObject {
 	public TerminalColor baseColor;
 	public TerminalColor highlightColor;
 	public boolean renderAsGhost = false;
+	public boolean isBlocker = false;
 
 	public TetrominoBlock(int x, int y, GameObject parent, TerminalColor color) {
 		this.relativeLocationX = x;

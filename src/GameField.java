@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class GameField extends GameObject {
 	private int width;
 	private int height;
@@ -54,16 +56,19 @@ public class GameField extends GameObject {
 
 		for(int iy = 0; iy < this.height; iy++) {
 			boolean isRowFull = true;
+			boolean isBlockingRow = false;
 
 			for (int ix = 0; ix < this.width; ix++) {
 				isRowFull = isRowFull && this.grid[ix][iy] != null;
+				isBlockingRow = isBlockingRow || (this.grid[ix][iy] != null && this.grid[ix][iy].isBlocker);
 			}
 
-			if (isRowFull) {
+			if (isRowFull && !isBlockingRow) {
 				rowsRemoved++;
 				for(int fx = 0; fx < this.width; fx++){
 					this.grid[fx][iy] = null;
 				}
+
 				for(int py = iy ; py > 0 ; py--){
 					for (int fx = 0 ; fx < this.width; fx++){
 						this.grid[fx][py] = this.grid[fx][py-1];
@@ -72,12 +77,69 @@ public class GameField extends GameObject {
 							this.grid[fx][py].relativeLocationY++;
 						}
 					}
-
 				}	
 			}
 		}
 
 		return rowsRemoved;
+	}
+
+	public int removeBlockingRows(){
+		int rowsRemoved = 0;
+
+		for(int iy = 0; iy < this.height; iy++) {
+			boolean isRowFull = true;
+			boolean isBlockingRow = false;
+
+			for (int ix = 0; ix < this.width; ix++) {
+				isRowFull = isRowFull && this.grid[ix][iy] != null;
+				isBlockingRow = isBlockingRow || (this.grid[ix][iy] != null && this.grid[ix][iy].isBlocker);
+			}
+
+			if (isRowFull && isBlockingRow) {
+				rowsRemoved++;
+				for(int fx = 0; fx < this.width; fx++){
+					this.grid[fx][iy] = null;
+				}
+
+				for(int py = iy ; py > 0 ; py--){
+					for (int fx = 0 ; fx < this.width; fx++){
+						this.grid[fx][py] = this.grid[fx][py-1];
+
+						if (this.grid[fx][py] != null) {
+							this.grid[fx][py].relativeLocationY++;
+						}
+					}
+				}	
+			}
+		}
+
+		return rowsRemoved;
+	}
+
+	public void addBlockingRow() {
+		for (int ix = 0; ix < this.width; ix++) {
+			for (int iy = 1; iy < this.height; iy++) {
+				if (this.grid[ix][iy] != null) {
+					this.grid[ix][iy].relativeLocationY--;
+				} 
+
+				this.grid[ix][iy-1] = this.grid[ix][iy];
+			}
+		}
+
+		Random rand = new Random();
+		for (int x = 0; x < this.width; x++) {
+			
+			if (rand.nextInt(this.width) > 1) { 
+				TetrominoBlock block = new TetrominoBlock(x, this.height - 1, this, TerminalColor.DARK_GRAY);
+				block.isBlocker = true;
+				this.grid[x][this.height - 1] = block;
+			}
+			else {
+				this.grid[x][this.height - 1] = null;
+			}
+		}
 	}
 
 	public int width() { return this.width; }
