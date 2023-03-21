@@ -9,7 +9,7 @@ public class Mainmenu {
 	public Mainmenu(SoundPlayer bgMusic){
 		this.bgMusic = bgMusic;
 		this.selectedIndex = 0;
-		this.selections = new String[]{"PLAY", "SOUND",};
+		this.selections = new String[]{"PLAY SOLO", "HOST GAME", "JOIN GAME"};
 	}
 
 	public void draw(TerminalCanvas canvas){
@@ -17,9 +17,9 @@ public class Mainmenu {
 
 		for (int i = 0; i < selections.length; i++) {
 			if (i == selectedIndex) {
-				canvas.drawString(canvas.width()/2, canvas.height()/2 + i * 2, selections[i], TerminalColor.BLACK, TerminalColor.WHITE);
+				canvas.drawString(canvas.width()/2 - selections[i].length()/2, canvas.height()/2 + i * 2, selections[i], TerminalColor.BLACK, TerminalColor.WHITE);
 			} else {
-				canvas.drawString(canvas.width()/2, canvas.height()/2 + i * 2, selections[i], TerminalColor.WHITE, TerminalColor.BLACK);
+				canvas.drawString(canvas.width()/2 - selections[i].length()/2, canvas.height()/2 + i * 2, selections[i], TerminalColor.WHITE, TerminalColor.BLACK);
 			}
 		}
 	}
@@ -36,14 +36,14 @@ public class Mainmenu {
 		if(input.isKeyPressed(' ') && selectedIndex == 0){
 			this.startGame = true;
 		}
-
-		if((input.isKeyPressed('A') || input.isKeyPressed('a')) && this.selectedIndex == 1){
-			this.bgMusic.setVolume(0.5f);
+		if(input.isKeyPressed(' ') && selectedIndex == 1){
+			
+		}
+		if(input.isKeyPressed(' ') && selectedIndex == 2){
+			
 		}
 
-		if((input.isKeyPressed('D') || input.isKeyPressed('d')) && this.selectedIndex == 1){
-			this.bgMusic.setVolume(0.7f);
-		}
+		
 
 	}
 
