@@ -132,7 +132,7 @@ public class Game {
 		this.localStats.rowsRemoved += sumRowsRemoved;
 
 		if (fullRowsRemoved > 1) {
-			NetworkMessage addRowsMsg = new NetworkMessage(NetworkMessage.ADD_BLOCKING_ROWS, fullRowsRemoved);
+			NetworkMessage addRowsMsg = new NetworkMessage(NetworkMessage.ADD_BLOCKING_ROWS, fullRowsRemoved / 2);
 			this.netManager.sendReliable(addRowsMsg);
 		}
 

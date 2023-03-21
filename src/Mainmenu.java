@@ -95,6 +95,7 @@ public class Mainmenu {
 
 			inputIp = inputIp.replaceAll("\n", "");
 			inputIp = inputIp.replaceAll("\r", "");
+			inputIp = inputIp.replaceAll(" ", "");
 		}
 	}
 
