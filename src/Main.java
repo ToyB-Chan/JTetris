@@ -3,7 +3,7 @@ import java.util.concurrent.ExecutionException;
 
 public class Main {
 	public static final int TARGET_FRAME_TIME = 16;
-	public static final int NET_PORT = 813;
+	public static final int NET_PORT = 51470;
 
 	public static void main(String[] args) throws InterruptedException, IOException, ExecutionException {
 		TerminalCanvas canvas = new TerminalCanvas(53, 29, TerminalColor.BLACK);
