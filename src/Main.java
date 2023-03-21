@@ -19,18 +19,18 @@ public class Main {
 		String username = "User";
 		
 		while (true) {
-			menu.tick();
 			menu.draw(canvas);
+			menu.tick();
 			menu.inputTick(input);
-
-			if (menu.startGame) {
-				break;
-			}
 
 			canvas.renderBuffer(System.out);
 			input.update();
 			Timer.update(TARGET_FRAME_TIME);
 			Thread.sleep(TARGET_FRAME_TIME);
+
+			if (menu.startGame) {
+				break;
+			}
 		}
 
 		boolean multiplayer = menu.multiplayer;

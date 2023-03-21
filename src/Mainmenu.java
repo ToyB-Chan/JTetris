@@ -105,6 +105,8 @@ public class Mainmenu {
 				this.multiplayer = true;
 				this.host = true;
 				this.startGame = true;
+
+				this.username = "HOST";
 			}
 		}
 
@@ -113,6 +115,8 @@ public class Mainmenu {
 				this.multiplayer = true;
 				this.host = false;
 				this.startGame = true;
+
+				this.username = "CLIENT";
 			}
 		}
 
