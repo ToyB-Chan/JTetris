@@ -3,26 +3,25 @@ import java.util.concurrent.ExecutionException;
 
 public class Main {
 	public static final int TARGET_FRAME_TIME = 16;
+	public static final int NET_PORT = 813;
 
 	public static void main(String[] args) throws InterruptedException, IOException, ExecutionException {
 		TerminalCanvas canvas = new TerminalCanvas(53, 29, TerminalColor.BLACK);
 		TerminalInputHook input = new TerminalInputHook();
 		input.startHook(System.in);
     
-    SoundPlayer bgMusic = new SoundPlayer("./res/songa.wav", true);
+    	SoundPlayer bgMusic = new SoundPlayer("./res/songa.wav", true);
 		bgMusic.setVolume(0.5f);
 		bgMusic.play();
     
-    Mainmenu menu = new Mainmenu(bgMusic);
-		String username = "User";
 		NetworkManager netManager = new NetworkManager();
-		Game game = new Game(username, netManager);
-		boolean pause = false;
+		Mainmenu menu = new Mainmenu(netManager);
+		String username = "User";
 		
 		while (true) {
-			menu.inputTick(input);
 			menu.tick();
 			menu.draw(canvas);
+			menu.inputTick(input);
 
 			if (menu.startGame) {
 				break;
@@ -33,10 +32,12 @@ public class Main {
 			Timer.update(TARGET_FRAME_TIME);
 			Thread.sleep(TARGET_FRAME_TIME);
 		}
-		
-		Game game = new Game();
+
+		boolean multiplayer = menu.multiplayer;
+		boolean host = menu.host;
+
+		Game game = new Game(username, netManager);
 		boolean pause = false;
-		boolean mute = false;
 
 		while (true) {
 			game.draw(canvas);
@@ -51,14 +52,6 @@ public class Main {
 					NetworkMessage msg = new NetworkMessage(NetworkMessage.GAME_BEGIN);
 					netManager.sendReliable(msg);
 				}
-			}
-			if ((input.isKeyPressed('M') || input.isKeyPressed('m')) && mute == false){
-				bgMusic.pause();
-				mute = true;
-			}
-			if ((input.isKeyPressed('M') || input.isKeyPressed('m')) && mute == true){
-				bgMusic.play();
-				mute = false;
 			}
 			
 
