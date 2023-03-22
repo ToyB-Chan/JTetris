@@ -74,7 +74,7 @@ public class Game {
 		
 		canvas.drawString(gameField.getAbsoluteLocationX()+2, 1, "JTETRIS" , TerminalColor.WHITE, TerminalColor.TRANSPARENT);
 
-		canvas.drawString(7, 15, this.localStats.username + ":", TerminalColor.WHITE, TerminalColor.TRANSPARENT);
+		canvas.drawString(7, 15, this.localStats.username + " (You):", TerminalColor.WHITE, TerminalColor.TRANSPARENT);
 		canvas.drawString(7, 16, "- Score: " + this.localStats.score, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
 		canvas.drawString(7, 17, "- Level: " + this.localStats.level, TerminalColor.WHITE, TerminalColor.TRANSPARENT);
 		canvas.drawString(7, 18, "- Rows : " + this.localStats.rowsRemoved, TerminalColor.WHITE, TerminalColor.TRANSPARENT);

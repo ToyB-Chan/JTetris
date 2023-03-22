@@ -68,6 +68,8 @@ public class Mainmenu {
 			this.selectedIndex++;
 		} else if(input.isKeyPressed(' ') && this.mode == 0 && selectedIndex == 0){
 			this.startGame = true;
+
+			this.username = "User";
 		} else if(input.isKeyPressed(' ') && this.mode == 0 && selectedIndex == 1){
 			this.mode = 1;
 		} else if(input.isKeyPressed(' ') && this.mode == 0 && selectedIndex == 2){

@@ -16,7 +16,6 @@ public class Main {
     
 		NetworkManager netManager = new NetworkManager();
 		Mainmenu menu = new Mainmenu(netManager);
-		String username = "User";
 		
 		while (true) {
 			menu.draw(canvas);
@@ -35,6 +34,7 @@ public class Main {
 
 		boolean multiplayer = menu.multiplayer;
 		boolean host = menu.host;
+		String username = menu.username;
 
 		Game game = new Game(username, netManager);
 		boolean pause = false;
