@@ -25,7 +25,7 @@ public class Mainmenu {
 	}
 
 	public void draw(TerminalCanvas canvas) throws UnknownHostException{
-		canvas.drawArea(0, 0, canvas.width(), canvas.height(), ' ', TerminalColor.TRANSPARENT, TerminalColor.BLACK);
+		canvas.drawArea(0, 0, canvas.width(), canvas.height(), '\r', TerminalColor.TRANSPARENT, TerminalColor.BLACK);
 
 		if (this.mode == 0) {
 			for (int i = 0; i < selections.length; i++) {
@@ -66,20 +66,20 @@ public class Mainmenu {
 			this.selectedIndex--;
 		} else if ((input.isKeyPressed('S') || input.isKeyPressed('s')) && this.mode == 0 && this.selectedIndex < this.selections.length-1) {
 			this.selectedIndex++;
-		} else if(input.isKeyPressed(' ') && this.mode == 0 && selectedIndex == 0){
+		} else if(input.isKeyPressed('\r') && this.mode == 0 && selectedIndex == 0){
 			this.startGame = true;
 
 			this.username = "User";
-		} else if(input.isKeyPressed(' ') && this.mode == 0 && selectedIndex == 1){
+		} else if(input.isKeyPressed('\r') && this.mode == 0 && selectedIndex == 1){
 			this.mode = 1;
-		} else if(input.isKeyPressed(' ') && this.mode == 0 && selectedIndex == 2){
+		} else if(input.isKeyPressed('\r') && this.mode == 0 && selectedIndex == 2){
 			this.inputIp = "";
 			this.mode = 2;
-		} else if(input.isKeyPressed(' ') && this.mode == 1){
+		} else if(input.isKeyPressed('\r') && this.mode == 1){
 			this.mode = 0;
-		} else if(input.isKeyPressed(' ') && this.mode == 2){
+		} else if(input.isKeyPressed('\r') && this.mode == 2){
 			this.mode = 3;
-		} else if(input.isKeyPressed(' ') && this.mode == 3){
+		} else if(input.isKeyPressed('\r') && this.mode == 3){
 			this.mode = 0;
 		}
 
